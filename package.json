@@ -1,0 +1,27 @@
+{
+  "name": "starter",
+  "version": "1.0.0",
+  "description": "Full stack app with React 19+, tRPC, and Cloudflare",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:full": "concurrently \"pnpm --filter @starter/backend dev\" \"pnpm --filter @starter/frontend dev\"",
+    "dev:remote": "concurrently \"pnpm --filter @starter/backend dev\" \"pnpm --filter @starter/frontend dev\"",
+    "setup:remote": "./setup-remote.sh",
+    "test:remote": "echo 'Deploy backend first, then update frontend URL and rebuild'",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:write": "biome format --write .",
+    "typecheck": "turbo typecheck",
+    "deploy": "turbo deploy"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.3",
+    "concurrently": "^9.2.1",
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0"
+  },
+  "packageManager": "pnpm@10.14.0"
+}

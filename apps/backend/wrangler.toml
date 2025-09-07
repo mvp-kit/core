@@ -1,0 +1,44 @@
+name = "starter-backend"
+main = "src/index.ts"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "npm run build"
+
+# Remote bindings for testing - connect to real resources during development
+[[d1_databases]]
+binding = "DB"
+database_name = "starter-db"
+database_id = "id"
+experimental_remote = true
+
+# KV namespace with remote binding
+[[kv_namespaces]]
+binding = "KV"
+id = "id"
+experimental_remote = true
+
+# R2 bucket with remote binding
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "starter-bucket"
+experimental_remote = true
+# Uncomment and set your bucket name when created
+# bucket_name = "your-bucket-name"
+
+# [durable_objects]
+# bindings = [
+#   { name = "SESSION", class_name = "Session" }
+# ]
+
+[vars]
+ENVIRONMENT = "development"
+
+# Remote development configuration
+[dev]
+# Use remote resources for testing
+remote = true
+# Uncomment to use specific environment
+# local_protocol = "https"
+# upstream_protocol = "https"

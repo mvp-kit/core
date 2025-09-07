@@ -1,0 +1,12 @@
+{
+  "extends": "../config/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "types": ["@cloudflare/workers-types"]
+  },
+  "include": ["index.ts"],
+  "exclude": ["dist", "node_modules"]
+}
