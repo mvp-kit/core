@@ -1,0 +1,13 @@
+{
+  "name": "@starter/config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "tsconfig.json",
+  "files": [
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "echo 'Config package built'",
+    "typecheck": "echo 'Config package typechecked'"
+  }
+}

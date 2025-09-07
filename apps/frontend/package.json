@@ -1,0 +1,43 @@
+{
+  "name": "@starter/frontend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:write": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-query": "^5.87.0",
+    "@tanstack/react-router": "^1.131.0",
+    "@tanstack/react-router-devtools": "^1.131.0",
+    "@trpc/client": "^11.5.1",
+    "@trpc/react-query": "^11.5.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.542.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.5.6",
+    "shadcn": "^3.2.1",
+    "tailwindcss": "^4.1.13",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4"
+  }
+}
