@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       sitemapPlugin({
-        baseUrl: config.domainName || 'https://localhost:3000',
+        baseUrl: 'https://{{domainName}}',
         routeTreePath: 'src/routeTree.gen.ts',
         enabled: mode === 'production' // Only generate sitemap in production builds
       }),
