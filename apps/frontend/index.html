@@ -2,9 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Starter App</title>
+    <title>{{projectDisplayName}}</title>
+    <meta name="description" content="{{projectDescription}}" />
+    {{#if domainName}}
+    <link rel="canonical" href="{{#if (startsWith domainName 'http')}}{{domainName}}{{else}}https://{{domainName}}{{/if}}" />
+    {{/if}}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark light" />
   </head>
   <body>
     <div id="root"></div>

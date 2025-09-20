@@ -1,0 +1,41 @@
+{
+  "name": "{{projectName}}",
+  "version": "1.0.0",
+  "description": "{{projectDescription}}",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "deploy:apps": "turbo run deploy:app",
+    "deploy:backend": "turbo run deploy:app --filter={{backendPackageName}}",
+    "deploy:frontend": "turbo run deploy:app --filter={{frontendPackageName}}",
+    "lint": "turbo lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "turbo format",
+    "format:fix": "turbo run format:fix",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo clean"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.4",
+    "@types/fs-extra": "11.0.4",
+    "concurrently": "9.2.1",
+    "turbo": "2.5.6",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0",
+    "bun": ">=1.0.0"
+  },
+  "packageManager": "{{packageManager}}@{{packageManagerVersion}}",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]{{#if (eq packageManager 'pnpm')}},
+  "pnpm": {
+    "overrides": {}
+  }{{/if}}{{#if (eq packageManager 'bun')}},
+  "trustedDependencies": []{{/if}}
+}

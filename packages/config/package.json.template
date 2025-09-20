@@ -1,0 +1,28 @@
+{
+  "name": "@config",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared configuration for MVPKit",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "4.1.8"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  },
+  "files": [
+    "dist"
+  ]
+}
