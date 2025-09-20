@@ -1,334 +1,189 @@
-# Starter App
+# MVPKit - Core
 
-A full stack application built with React 19+, TanStack Router, tRPC, and Cloudflare Workers.
+Production-ready React TypeScript starter kit with edge computing.
 
 ## 🚀 Quick Start
 
-### Development
+### Option 1: Use the CLI (Recommended)
 
-1. **Install dependencies:**
-   ```bash
-   pnpm install
-   ```
+Create a new project using the MVPKit CLI:
 
-2. **Set up Cloudflare resources (optional for remote bindings):**
-   ```bash
-   # Create D1 database
-   npx wrangler d1 create starter-db
-
-   # Create KV namespace
-   npx wrangler kv:namespace create "KV"
-
-   # Create R2 bucket
-   npx wrangler r2 bucket create starter-bucket
-   ```
-
-3. **Start development with remote bindings:**
-   ```bash
-   pnpm dev:remote
-   ```
-
-   Or start them separately:
-   ```bash
-   # Terminal 1 - Backend (with remote bindings)
-   cd apps/backend && pnpm dev
-
-   # Terminal 2 - Frontend
-   cd apps/frontend && pnpm dev
-   ```
-
-4. **Open your browser:**
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:8787
-
-#### Development Modes
-
-- **`pnpm dev:remote`** - Uses remote bindings (connects to real Cloudflare resources)
-- **`pnpm dev:full`** - Same as above (alias for consistency)
-- **`pnpm --filter @starter/backend dev:local`** - Uses local simulations only
-
-### API Proxy Setup
-
-The frontend Vite server automatically proxies API calls to the backend:
-
-- **tRPC calls** (`/trpc/*`) → `http://localhost:8787/trpc`
-- **WebSocket support** enabled for real-time features
-- **CORS handling** managed automatically
-- **Error logging** for debugging proxy issues
-
-This means your TanStack Query and tRPC calls work transparently during development without any additional configuration!
-
-### Testing Backend Connection
-
-1. Start both services using `pnpm dev:full`
-2. Open http://localhost:3000 in your browser
-3. Look for the "Backend Connection Test" section
-4. Click the test buttons to verify the connection:
-   - **Test Hello Endpoint** - Tests basic tRPC communication
-   - **Test Get User Endpoint** - Tests user data retrieval
-
-## 🧪 Remote Testing with Cloudflare
-
-Test your full stack against real Cloudflare resources instead of local development.
-
-### Prerequisites
-
-1. **Cloudflare Account:** Sign up at [cloudflare.com](https://cloudflare.com)
-2. **Wrangler CLI:** Install and authenticate
-   ```bash
-   npm install -g wrangler
-   wrangler auth login
-   ```
-
-### Quick Setup (Automated)
-
-Run the automated setup script:
 ```bash
-./setup-remote.sh
+# Create a new MVPKit application
+npx @mvp-kit/create my-app
+
+# Or with pnpm (recommended)
+pnpm create @mvp-kit my-app
+
+# Or with bun
+bun create @mvp-kit my-app
 ```
 
-This will:
-- ✅ Create D1 database (`starter-db`)
-- ✅ Create R2 bucket (`starter-bucket`)
-- ✅ Deploy your Worker
-- ✅ Build the frontend
+The CLI will automatically:
+- Set up the project structure
+- Install dependencies with your preferred package manager
+- Configure environment files
+- Initialize git repository
+- Optionally set up and seed the database
 
-### Manual Setup
+### Option 2: Clone and Set Up Manually
 
-If you prefer to set up manually:
+If you prefer to clone this repository directly:
 
-1. **Create D1 Database:**
-   ```bash
-   wrangler d1 create starter-db
-   ```
-   Copy the `database_id` and update `apps/backend/wrangler.toml`
+#### Prerequisites
 
-2. **Create R2 Bucket:**
-   ```bash
-   wrangler r2 bucket create starter-bucket
-   ```
+- **Node.js** 20+
+- **pnpm** 8+ or **bun** 1.0+ (recommended)
+- **Cloudflare Account** (free tier available)
 
-3. **Deploy Backend:**
-   ```bash
-   cd apps/backend
-   wrangler deploy
-   ```
-   Note the deployed Worker URL
+#### 1. Important: Template Structure
 
-4. **Update Frontend:**
-   - Edit `apps/frontend/src/lib/trpc-client.tsx`
-   - Change `BACKEND_URL` to your deployed Worker URL
-   - Example: `https://starter-backend.your-subdomain.workers.dev`
+**Note**: This repository contains template files with `.template` and `.tpl` extensions. These are not meant to be used directly but are processed by the MVPKit CLI to generate actual project files.
 
-5. **Build Frontend:**
-   ```bash
-   cd apps/frontend
-   pnpm build
-   ```
+The CLI automatically:
+- Processes template files (removes `.template`/`.tpl` extensions)
+- Transforms variables (e.g., `{{projectName}}` → your project name)
+- Removes workspace configurations to prevent nested workspace conflicts
+- Generates proper package.json files with correct naming
 
-### Testing Remote Connection
+#### 2. Install Dependencies
 
-1. **Deploy and Update URLs:**
-   ```bash
-   # Deploy backend
-   cd apps/backend && wrangler deploy
+```bash
+# With pnpm (recommended)
+pnpm install
 
-   # Update frontend with deployed URL
-   # Edit apps/frontend/src/lib/trpc-client.tsx
-
-   # Build frontend
-   cd apps/frontend && pnpm build
-   ```
-
-2. **Test the Connection:**
-   - Open your built frontend
-   - Use the "Backend Connection Test" section
-   - Test both endpoints with real Cloudflare resources
-
-## 🏗️ Architecture
-
-- **Frontend:** React 19+ with TanStack Router and Tailwind CSS v4
-- **Backend:** tRPC over Hono on Cloudflare Workers
-- **Database:** Cloudflare D1 with Prisma
-- **Storage:** Cloudflare KV, R2, and Durable Objects
-- **Auth:** BetterAuth
-- **Build:** Turborepo with pnpm workspaces
-
-## 🎨 Styling
-
-This project uses **Tailwind CSS v4** with the following setup:
-
-- **PostCSS Plugin:** `@tailwindcss/postcss` (required for v4)
-- **CSS Variables:** Custom design tokens for theming
-- **shadcn/ui:** Pre-built components with consistent styling
-- **Dark Mode:** Class-based dark mode support
-
-### Tailwind CSS v4 Features
-
-- ✅ **CSS-first configuration** (no JavaScript config needed)
-- ✅ **Native CSS variables** support
-- ✅ **Better performance** with improved tree-shaking
-- ✅ **Modern CSS features** support
-
-## 🔗 Remote Bindings
-
-This project uses **Cloudflare Remote Bindings** for development, which means:
-
-- ✅ **Worker code runs locally** (fast development iteration)
-- ✅ **Resources connect to real Cloudflare services** (accurate testing)
-- ✅ **No data synchronization issues** between local and production
-- ✅ **Test with real D1, KV, R2 data**
-
-### Configured Remote Bindings
-
-- **D1 Database:** `starter-db` (set `database_id` in wrangler.toml)
-- **KV Namespace:** `KV` (set `id` and `preview_id` in wrangler.toml)
-- **R2 Bucket:** `starter-bucket` (set `bucket_name` in wrangler.toml)
-
-### Setup Instructions
-
-1. **Create Cloudflare resources:**
-   ```bash
-   # D1 Database
-   npx wrangler d1 create starter-db
-
-   # KV Namespace
-   npx wrangler kv:namespace create "KV"
-
-   # R2 Bucket
-   npx wrangler r2 bucket create starter-bucket
-   ```
-
-2. **Update wrangler.toml with resource IDs:**
-   ```toml
-   [[d1_databases]]
-   database_id = "your-actual-database-id"
-
-   [[kv_namespaces]]
-   id = "your-kv-namespace-id"
-   preview_id = "your-preview-kv-namespace-id"
-
-   [[r2_buckets]]
-   bucket_name = "your-actual-bucket-name"
-   ```
-
-3. **Start development:**
-   ```bash
-   pnpm dev:remote  # Uses remote bindings
-   ```
-
-### Benefits
-
-- **Real Data Testing:** Test with actual production data
-- **Accurate Performance:** Real network latency and performance
-- **No Sync Issues:** No need to sync local vs remote data
-- **Production Parity:** Closer to production behavior
-
-## 📦 Available Scripts
-
-- `pnpm build` - Build all packages
-- `pnpm dev:remote` - Start development with remote bindings (recommended)
-- `pnpm dev:full` - Same as dev:remote (alias)
-- `pnpm lint` - Run linting
-- `pnpm typecheck` - Run TypeScript type checking
-- `pnpm deploy` - Deploy to Cloudflare
-
-### Backend Scripts
-
-- `pnpm --filter @starter/backend dev` - Start backend with remote bindings
-- `pnpm --filter @starter/backend dev:local` - Start backend with local simulations only
-- `pnpm --filter @starter/backend build:validate` - Validate deployment with wrangler dry-run
-
-## 🔧 Development
-
-### Development Workflow
-
-1. **Start both services:**
-   ```bash
-   pnpm dev:remote
-   ```
-
-2. **Frontend HMR:** Make changes to React components - they hot-reload instantly
-3. **Backend changes:** tRPC API calls automatically proxy to wrangler dev
-4. **Test with real data:** Remote bindings connect to actual Cloudflare resources
-
-### Adding New Features
-
-1. **Backend API:** Add procedures to `apps/backend/src/routes/index.ts`
-2. **Frontend Components:** Add components to `apps/frontend/src/components/`
-3. **Routes:** Add routes to `apps/frontend/src/routes/`
-4. **Types:** Shared types go in `packages/types/`
-
-### API Communication
-
-- **tRPC calls** are automatically proxied from frontend to backend
-- **No CORS issues** during development
-- **WebSocket support** for real-time features
-- **Error handling** with detailed logging
-
-### Testing
-
-- **Unit Tests:** Add to respective package's test directories
-- **Integration Tests:** Test full stack communication via the test buttons
-- **E2E Tests:** Use Playwright or similar for end-to-end testing
-
-### Troubleshooting
-
-#### Build Issues
-
-**Tailwind CSS v4 PostCSS Error:**
-```
-It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin
+# Or with bun
+bun install
 ```
 
-**Solution:**
-- ✅ Install `@tailwindcss/postcss`
-- ✅ Update `postcss.config.js` to use `'@tailwindcss/postcss': {}`
-- ✅ Update `tailwind.config.js` for v4 syntax
-- ✅ Use `var(--variable)` instead of `hsl(var(--variable))`
+### 3. Environment Setup
 
-#### API Connection Issues
+```bash
+# Copy environment templates
+cp apps/frontend/.env.example apps/frontend/.env.local
+cp apps/backend/.dev.vars.example apps/backend/.dev.vars
 
-If tRPC calls aren't working:
+# Configure your environment variables
+```
 
-1. **Check backend is running:**
-   ```bash
-   curl http://localhost:8787/trpc/hello
-   ```
+#### 4. Database Setup
 
-2. **Check proxy in browser dev tools:**
-   - Network tab for failed requests
-   - Console for proxy error messages
+```bash
+# Create local D1 database
+cd apps/backend
 
-3. **Verify ports:**
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:8787
+# With pnpm
+pnpm db:create
+pnpm db:migrate
 
-#### Common Issues
+# Or with bun
+bun db:create
+bun db:migrate
+```
 
-- **CORS errors:** Proxy handles CORS automatically
-- **Connection refused:** Ensure backend is running with `pnpm dev:remote`
-- **WebSocket issues:** Check if backend supports WebSocket connections
-- **CSS not loading:** Check Tailwind CSS v4 PostCSS configuration
+#### 5. Start Development
 
-## 🚀 Deployment
+```bash
+# Start both frontend and backend
+pnpm dev  # or bun dev
 
-1. **Build for production:**
-   ```bash
-   pnpm build
-   ```
+# Or start individually
+pnpm dev:frontend  # Frontend only (or bun dev:frontend)
+pnpm dev:backend   # Backend only (or bun dev:backend)
+```
 
-2. **Deploy to Cloudflare:**
-   ```bash
-   pnpm deploy
-   ```
+Visit [http://localhost:5173](http://localhost:5173) to see your application!
 
-Make sure to configure your Cloudflare account and resources before deploying.
+#### 6. Deploy to Production
 
-## 📚 Resources
+```bash
+# Deploy backend to Cloudflare Workers
+pnpm deploy:backend  # or bun deploy:backend
 
-- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
-- [Cloudflare D1 Documentation](https://developers.cloudflare.com/d1/)
-- [Cloudflare R2 Documentation](https://developers.cloudflare.com/r2/)
-- [tRPC Documentation](https://trpc.io/)
-- [TanStack Router](https://tanstack.com/router/)
+# Deploy frontend to Cloudflare Pages
+pnpm deploy:frontend  # or bun deploy:frontend
+
+# Or deploy everything
+pnpm deploy  # or bun deploy
+```
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 19** - Latest React with concurrent features
+- **TanStack Router** - Type-safe file-based routing
+- **TanStack Query** - Powerful data synchronization
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - Beautiful, accessible components
+- **Vite** - Lightning-fast development
+
+### Backend
+- **Cloudflare Workers** - Edge runtime environment
+- **Hono** - Ultra-fast web framework
+- **tRPC** - End-to-end type safety
+- **Better Auth** - Modern authentication
+- **Drizzle ORM** - Type-safe database operations
+- **Zod** - Runtime type validation
+
+### Infrastructure
+- **Cloudflare D1** - Distributed SQLite database
+- **Cloudflare KV** - Global key-value storage
+- **Cloudflare R2** - Object storage (S3-compatible)
+- **Cloudflare Pages** - Static site hosting
+
+### Development
+- **Turbo** - High-performance monorepo build system
+- **pnpm/bun** - Fast, efficient package managers
+- **TypeScript** - Static type checking
+- **Biome** - Fast formatter and linter
+
+## 📁 Project Structure
+
+```
+{{projectKebabCase}}/
+├── apps/
+│   ├── frontend/           # React application
+│   │   ├── src/
+│   │   │   ├── components/ # Reusable UI components
+│   │   │   ├── routes/     # File-based routing
+│   │   │   └── lib/        # Utilities and config
+│   │   └── package.json
+│   └── backend/            # Cloudflare Workers API
+│       ├── src/
+│       │   ├── routes/     # tRPC API routes
+│       │   └── lib/        # Database, auth, utilities
+│       └── wrangler.toml   # Cloudflare configuration
+├── packages/
+│   ├── api/                # Shared API types
+│   └── config/             # Shared configuration
+└── package.json            # Root configuration
+```
+
+## 🌟 Features
+
+### 🔥 Edge-Native Performance
+- **Global CDN**: Sub-100ms response times worldwide via Cloudflare Pages
+- **Zero Cold Starts**: Instant scaling with Cloudflare Workers
+- **Edge Computing**: Process requests close to your users
+
+### 🛡️ Security First
+- **Built-in Authentication**: Production-ready auth with Better Auth
+- **Type-safe APIs**: End-to-end type safety with tRPC
+- **Input Validation**: Runtime validation with Zod schemas
+- **CORS & Rate Limiting**: Configurable security middleware
+
+### 🏗️ Modern Architecture
+- **Monorepo Structure**: Clean separation with workspaces (pnpm/bun)
+- **TypeScript Everywhere**: Full type safety across the stack
+- **Database Included**: SQLite-compatible D1 with Drizzle ORM
+- **File Storage**: Integrated R2 object storage (S3-compatible)
+
+### 🎨 Developer Experience
+- **Hot Reload**: Instant feedback during development
+- **Code Quality**: Biome for linting and formatting
+- **Testing Ready**: Framework setup for unit and integration tests
+- **Type Safety**: End-to-end TypeScript coverage
+
+---
+
+**Built with ❤️ using [MVPKit](https://mvpkit.dev)**

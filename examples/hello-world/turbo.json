@@ -1,0 +1,63 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**",
+        "components/**",
+        "public/**",
+        "index.html",
+        "vite.config.*",
+        "wrangler.toml",
+        "tsconfig.json",
+        "package.json"
+      ],
+      "outputs": ["dist/**", ".turbo/**"]
+    },
+    "build:validate": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "wrangler.toml"],
+      "outputs": [".wrangler/**"]
+    },
+    "lint": {
+      "dependsOn": [],
+      "inputs": ["src/**", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+    },
+    "lint:fix": {
+      "dependsOn": [],
+      "inputs": ["src/**", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+    },
+    "format": {
+      "dependsOn": [],
+      "inputs": ["src/**", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+    },
+    "format:fix": {
+      "dependsOn": [],
+      "inputs": ["src/**", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"],
+      "inputs": []
+    },
+    "typecheck": {
+      "dependsOn": [],
+      "inputs": ["src/**", "**/*.ts", "**/*.tsx", "tsconfig.json", "package.json"],
+      "outputs": []
+    },
+    "deploy": {
+      "dependsOn": ["build:validate"],
+      "cache": false
+    },
+    "deploy:app": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}
