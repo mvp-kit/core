@@ -4,6 +4,7 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { createClientConfig } from "../../packages/config/src/index.js";
+import { sitemapPlugin } from "@mvp-kit/vite-sitemap-plugin";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -14,6 +15,11 @@ export default defineConfig(({ mode }) => {
       tanstackRouter({ target: "react" }),
       react(),
       tailwindcss(),
+      sitemapPlugin({
+        baseUrl: config.domainName || 'https://localhost:3000',
+        routeTreePath: 'src/routeTree.gen.ts',
+        enabled: mode === 'production' // Only generate sitemap in production builds
+      }),
     ],
     resolve: {
       alias: {
