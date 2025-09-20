@@ -1,8 +1,8 @@
 {
-  "name": "@mvp-kit/config",
+  "name": "@repo/config",
   "version": "0.0.0",
   "private": true,
-  "description": "Hello World - Configuration",
+  "description": "hello-world - config",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",

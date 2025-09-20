@@ -1,5 +1,7 @@
 # MVPKit - Core
 
+[![Template Validation](https://github.com/mvp-kit/core/actions/workflows/validate-templates.yml/badge.svg)](https://github.com/mvp-kit/core/actions/workflows/validate-templates.yml)
+
 Production-ready React TypeScript starter kit with edge computing.
 
 ## 🚀 Quick Start

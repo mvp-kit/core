@@ -1,0 +1,47 @@
+name = "{{projectName}}-api"
+main = "src/index.ts"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Default resources (development/local)
+[[d1_databases]]
+binding = "DB"
+database_name = "{{projectName}}-db-dev"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "drizzle"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "0000000000000000000000000000000000"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "{{projectName}}-bucket-dev"
+
+# Local development server configuration
+[dev]
+port = 8787
+local_protocol = "http"
+upstream_protocol = "http"
+
+
+# Production environment (used for deployment)
+[env.production]
+name = "{{projectName}}-api"
+
+[env.production.vars]
+NODE_ENV = "production"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "{{projectName}}-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "drizzle"
+
+[[env.production.kv_namespaces]]
+binding = "KV"
+id = "{{projectName}}-kv"
+
+[[env.production.r2_buckets]]
+binding = "R2"
+bucket_name = "{{projectName}}-bucket"

@@ -1,0 +1,45 @@
+name: 🚀 Core Templates CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Template validation (critical - blocks merges)
+  validate-templates:
+    name: 🛡️ Template Variables
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: Validate templates
+      run: npx @mvp-kit/template-validator core
+
+  # Example project validation
+  validate-examples:
+    name: 🧪 Example Projects
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        example: [ 'hello-world' ]
+    defaults:
+      run:
+        working-directory: examples/${{ matrix.example }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'pnpm'
+    - name: Install pnpm
+      run: npm install -g pnpm
+    - name: Install dependencies
+      run: pnpm install
+    - name: Type check
+      run: pnpm typecheck
+    - name: Build
+      run: pnpm build
