@@ -3,7 +3,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Providers } from './lib/providers'
 import { routeTree } from './routeTree.gen'
-import './styles/globals.css'
+import './styles.css'
 
 const router = createRouter({ routeTree })
 

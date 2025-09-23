@@ -5,19 +5,22 @@ on:
     branches: [ main, develop ]
     paths:
       - '**/*.template'
-      - 'validate-templates.js'
+      - '_scripts/validate.sh'
       - '.github/workflows/validate-templates.yml'
   pull_request:
     branches: [ main, develop ]
     paths:
       - '**/*.template'
-      - 'validate-templates.js'
+      - '_scripts/validate.sh'
       - '.github/workflows/validate-templates.yml'
 
 jobs:
   validate:
     name: Validate Template Variables
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
 
     steps:
     - name: 📥 Checkout code
@@ -30,13 +33,10 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
         scope: '@mvp-kit'
 
-    - name: 🔑 Configure GitHub packages
-      run: |
-        echo "@mvp-kit:registry=https://npm.pkg.github.com" >> ~/.npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
-
     - name: 🔍 Validate templates
       run: npx @mvp-kit/template-validator core
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: ✅ Validation passed
       if: success()

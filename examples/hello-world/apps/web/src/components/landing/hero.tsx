@@ -1,6 +1,5 @@
+import { Badge, Button } from '@repo/ui'
 import { BookOpen, Check, ExternalLink, Github } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 
 interface HeroProps {
   projectName: string

@@ -7,39 +7,48 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  # Template validation (critical - blocks merges)
-  validate-templates:
-    name: 🛡️ Template Variables
+  test-template:
+    name: 🧪 Test Template
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - name: Validate templates
-      run: npx @mvp-kit/template-validator core
-
-  # Example project validation
-  validate-examples:
-    name: 🧪 Example Projects
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        example: [ 'hello-world' ]
-    defaults:
-      run:
-        working-directory: examples/${{ matrix.example }}
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@mvp-kit'
+    - name: Create test app with @mvp-kit/cli
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        pnpm config set @mvp-kit:registry https://npm.pkg.github.com
+        pnpm dlx @mvp-kit/cli create test-app --template @mvp-kit/core@latest --dev
+    - name: Setup Node.js for test app
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'pnpm'
-    - name: Install pnpm
-      run: npm install -g pnpm
-    - name: Install dependencies
+        cache-dependency-path: test-app/pnpm-lock.yaml
+    - name: Install test app dependencies
+      working-directory: test-app
       run: pnpm install
     - name: Type check
-      run: pnpm typecheck
+      working-directory: test-app
+      run: pnpm run typecheck
+    - name: Lint check
+      working-directory: test-app
+      run: pnpm run lint
     - name: Build
-      run: pnpm build
+      working-directory: test-app
+      run: pnpm run build
+    - name: Dev server check
+      working-directory: test-app
+      run: |
+        pnpm run dev &
+        sleep 10
+        kill %1

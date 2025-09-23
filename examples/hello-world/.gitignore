@@ -167,5 +167,7 @@ vite.config.ts.timestamp-*
 # Cloudflare Workers
 dev-wrangler-*
 
+.serena
+.claude
 # Package manager (ensure pnpm-lock.yaml is already ignored)
 # pnpm-lock.yaml is already in package manager section above

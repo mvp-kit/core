@@ -28,6 +28,16 @@
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": false,
-    "verbatimModuleSyntax": false
-  }
+    "verbatimModuleSyntax": false,
+    "composite": false,
+    "disableReferencedProjectLoad": false
+  },
+  "references": [
+    { "path": "./packages/types" },
+    { "path": "./packages/config" },
+    { "path": "./packages/ui" },
+    { "path": "./apps/web" },
+    { "path": "./apps/api" }
+  ],
+  "files": []
 }

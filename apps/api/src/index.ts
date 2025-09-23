@@ -1,5 +1,5 @@
 import { trpcServer } from '@hono/trpc-server'
-import { createServerConfig } from '@config'
+import { createServerConfig } from '@repo/config'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { createAuth } from '@/lib/auth'

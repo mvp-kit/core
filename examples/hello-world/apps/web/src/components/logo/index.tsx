@@ -1,6 +1,6 @@
 import { Slot } from '@radix-ui/react-slot'
+import { Badge } from '@repo/ui'
 import * as React from 'react'
-import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { StarshipIcon, type StarshipIconProps } from './starship-icon'
 

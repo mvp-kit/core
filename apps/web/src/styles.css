@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../../../packages/ui/src/styles.css";
+
+@source "../src";
+@source "../../../packages/ui/src";
+
+
+/* --- App-specific overrides --- */
+:root {
+}

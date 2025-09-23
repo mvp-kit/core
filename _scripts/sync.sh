@@ -14,6 +14,7 @@ show_help() {
     echo "USAGE:"
     echo "  $0 to-example     # Template → Example (render templates to example)"
     echo "  $0 from-example   # Example → Template (extract example back to templates)"
+    echo "  $0 cleanup        # Clean build artifacts only (no sync)"
     echo "  $0 validate       # Validate templates after sync"
     echo "  $0 help          # Show this help"
     echo ""
@@ -26,20 +27,25 @@ show_help() {
     echo "EXAMPLES:"
     echo "  ./_scripts/sync.sh to-example     # Sync template changes to working example"
     echo "  ./_scripts/sync.sh from-example   # Sync working example back to templates"
+    echo "  ./_scripts/sync.sh cleanup        # Clean build artifacts from templates"
 }
 
 case "$1" in
     "to-example")
         echo "🔄 Syncing templates → hello-world example..."
-        node _scripts/sync-to-example.js
+        node _scripts/sync-template-to-example.js
         ;;
     "from-example")
         echo "🔄 Syncing hello-world example → templates..."
-        node _scripts/sync-from-example.js
+        node _scripts/sync-and-clean.js
         ;;
     "validate")
         echo "🔍 Validating templates..."
         ./_scripts/validate.sh
+        ;;
+    "cleanup")
+        echo "🧹 Cleaning build artifacts..."
+        node _scripts/sync-and-clean.js --cleanup-only
         ;;
     "help"|"-h"|"--help")
         show_help
