@@ -1,0 +1,30 @@
+# ===========================================
+# MVPKit Core Template Ignore Configuration
+# ===========================================
+# Files and directories that should NOT be copied when creating new projects
+# Focus on source files to exclude - cleanup handles build artifacts
+
+# Development examples (keep for core development, don't template)
+examples/
+
+# Template maintenance scripts
+_scripts/
+_packageManagers/
+
+# Git repository (preserve .gitignore but not .git history)
+.git/
+.github/
+
+# Template-specific documentation
+TEMPLATE_README.md
+
+# IDE and editor files (shouldn't be in source anyway)
+.vscode/
+.idea/
+
+# AI assistant files
+.serena/
+.claude/
+
+# Build artifacts that may contain stale imports
+dist/

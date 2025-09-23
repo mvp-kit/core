@@ -1,6 +1,6 @@
+import { Button } from '@repo/ui'
 import { CheckCircle, Loader2, XCircle } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { trpc } from '@/lib/trpc'
 
 export const APIDemo = () => {

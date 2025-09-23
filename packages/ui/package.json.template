@@ -1,0 +1,52 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "{{projectName}} - ui",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./lib/utils": "./dist/lib/utils.js",
+    "./components/*": "./dist/components/*.js",
+    "./hooks/*": "./dist/hooks/*.js",
+    "./lib/*": "./dist/lib/*.js"
+  },
+  "files": [
+    "dist",
+    "components.json"
+  ],
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "dev": "tsc --watch",
+    "dev:watch": "tsc --watch",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "react": ">=19.1.1",
+    "react-dom": ">=19.1.1"
+  },
+  "dependencies": {
+    "@radix-ui/react-label": "2.1.7",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "1.2.3",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "tailwind-merge": "3.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
+    "shadcn": "3.2.1",
+    "tailwindcss": "4.1.13",
+    "tsc-alias": "^1.8.16",
+    "typescript": "5.9.2"
+  }
+}

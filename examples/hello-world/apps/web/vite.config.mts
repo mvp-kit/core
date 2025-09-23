@@ -1,9 +1,9 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import { createClientConfig } from "../../packages/config/src/index.js";
+import tsconfigPaths from "vite-tsconfig-paths";
+import { createClientConfig } from "@repo/config";
 import { sitemapPlugin } from "@mvp-kit/vite-sitemap-plugin";
 
 export default defineConfig(({ mode }) => {
@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
+      tsconfigPaths(),
       tanstackRouter({ target: "react" }),
       react(),
       tailwindcss(),
@@ -21,14 +22,6 @@ export default defineConfig(({ mode }) => {
         enabled: mode === 'production' // Only generate sitemap in production builds
       }),
     ],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-        "@config": path.resolve(__dirname, "../../packages/config"),
-        "@types": path.resolve(__dirname, "../../packages/types"),
-        "@utils": path.resolve(__dirname, "../../packages/utils"),
-      },
-    },
     server: {
       port: config.frontendPort,
       allowedHosts: config.allowedHosts,
