@@ -1,7 +1,7 @@
 {
   "name": "hello-world",
   "version": "1.0.0",
-  "description": "A new MVPKit Core application: Hello World",
+  "description": "Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.",
   "private": false,
   "type": "module",
   "scripts": {
