@@ -11,6 +11,9 @@ examples/
 _scripts/
 _packageManagers/
 
+# Template configuration
+template.json
+
 # Git repository (preserve .gitignore but not .git history)
 .git/
 .github/

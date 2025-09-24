@@ -19,7 +19,7 @@ const TEMPLATE_ROOT = '.'
 // Variables used in hello-world example
 const EXAMPLE_VALUES = {
   projectName: 'hello-world',
-  projectDescription: 'A new MVPKit Core application: Hello World',
+  projectDescription: 'Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.',
   domainName: 'hello-world.mvpkit.dev',
   packageManager: 'pnpm',
   packageManagerVersion: '10.14.0'

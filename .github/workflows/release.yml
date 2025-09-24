@@ -1,0 +1,178 @@
+name: 🚀 Build, Test & Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-templates:
+    name: 🛡️ Validate Templates
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@mvp-kit'
+
+    - name: 🔍 Validate templates
+      run: npx @mvp-kit/template-validator core
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test-template:
+    name: 🧪 Test Template
+    runs-on: ubuntu-latest
+    needs: validate-templates
+    permissions:
+      contents: read
+      packages: read
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@mvp-kit'
+
+    - name: Create test app with @mvp-kit/cli
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        pnpm config set @mvp-kit:registry https://npm.pkg.github.com
+        pnpm dlx @mvp-kit/create@latest-dev test-app --template-path . --yes
+
+    - name: Setup Node.js for test app
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@mvp-kit'
+        cache: 'pnpm'
+        cache-dependency-path: test-app/pnpm-lock.yaml
+
+    - name: Install test app dependencies
+      working-directory: test-app
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: pnpm install
+
+    - name: Lint check
+      working-directory: test-app
+      run: pnpm run lint
+
+    - name: Build
+      working-directory: test-app
+      run: pnpm run build
+
+    - name: Type check
+      working-directory: test-app
+      run: pnpm run typecheck
+
+    - name: Dev server check
+      working-directory: test-app
+      run: |
+        pnpm run dev &
+        sleep 10
+        kill %1
+
+  release:
+    name: 📦 Create Release
+    runs-on: ubuntu-latest
+    needs: [validate-templates, test-template]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🏷️ Generate version from template config
+      id: version
+      run: |
+        # Read version from template.json
+        TEMPLATE_VERSION=$(node -p "require('./template.json').version")
+        VERSION="v${TEMPLATE_VERSION}"
+
+        # Check if this version already exists as a tag
+        if git tag -l "$VERSION" | grep -q "$VERSION"; then
+          echo "Version $VERSION already exists, incrementing patch..."
+          # Extract version numbers
+          IFS='.' read -r -a VERSION_PARTS <<< "$TEMPLATE_VERSION"
+          MAJOR=${VERSION_PARTS[0]:-1}
+          MINOR=${VERSION_PARTS[1]:-0}
+          PATCH=${VERSION_PARTS[2]:-0}
+
+          # Increment patch version
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+
+          # Update template.json with new version
+          node -e "
+            const fs = require('fs');
+            const config = require('./template.json');
+            config.version = '${MAJOR}.${MINOR}.${NEW_PATCH}';
+            fs.writeFileSync('./template.json', JSON.stringify(config, null, 2) + '\n');
+          "
+
+          VERSION="$NEW_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Generated version: $VERSION"
+
+    - name: 🚀 Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: "MVPKit Core Template ${{ steps.version.outputs.version }}"
+        body: |
+          ## MVPKit Core Template Release
+
+          **Version:** ${{ steps.version.outputs.version }}
+          **Commit:** ${{ github.sha }}
+
+          ### What's Changed
+          - Latest core template with all updates
+          - Validated template variables
+          - Tested with CLI integration
+
+          ### Usage
+          ```bash
+          # Download latest template
+          npx @mvp-kit/create my-app --template core
+
+          # Or specify this version explicitly
+          npx @mvp-kit/create my-app --template core@${{ steps.version.outputs.version }}
+          ```
+
+          ### Template Features
+          - Full-stack TypeScript monorepo
+          - React + Vite frontend
+          - Cloudflare Workers backend
+          - Shared UI components
+          - Database integration ready
+
+          **Full Changelog:** https://github.com/mvp-kit/core/releases
+        draft: false
+        prerelease: false

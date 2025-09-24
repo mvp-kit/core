@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta Tags -->
-    <title>MVPKit Demo - Hello World | Full-Stack TypeScript Starter</title>
-    <meta name="title" content="MVPKit Demo - Hello World | Full-Stack TypeScript Starter" />
+    <title>hello-world | Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.</title>
+    <meta name="title" content="hello-world | Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster." />
     <meta name="description" content="Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster." />
-    <meta name="keywords" content="MVPKit, TypeScript, React, tRPC, Cloudflare Workers, starter template, MVP, full-stack, authentication, database, deployment" />
-    <meta name="author" content="MVPKit" />
+    <meta name="author" content="hello-world" />
     <meta name="robots" content="index, follow" />
 
     <!-- Canonical URL -->
@@ -18,22 +17,22 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://hello-world.mvpkit.dev" />
-    <meta property="og:title" content="MVPKit Demo - Hello World | Full-Stack TypeScript Starter" />
+    <meta property="og:title" content="hello-world | Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster." />
     <meta property="og:description" content="Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster." />
     <meta property="og:image" content="https://hello-world.mvpkit.dev/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="MVPKit" />
+    <meta property="og:site_name" content="hello-world" />
     <meta property="og:locale" content="en_US" />
+    <meta property="article:author" content="MVPKit" />
+    <meta property="article:author:url" content="https://mvpkit.dev" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://hello-world.mvpkit.dev" />
-    <meta property="twitter:title" content="MVPKit Demo - Hello World | Full-Stack TypeScript Starter" />
+    <meta property="twitter:title" content="hello-world | Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster." />
     <meta property="twitter:description" content="Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster." />
     <meta property="twitter:image" content="https://hello-world.mvpkit.dev/og-image.png" />
-    <meta property="twitter:creator" content="@mvpkit" />
-    <meta property="twitter:site" content="@mvpkit" />
 
     <!-- Additional SEO -->
     <meta name="language" content="English" />
@@ -45,31 +44,16 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "MVPKit Demo - Hello World",
-      "description": "Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication",
+      "@type": "WebApplication",
+      "name": "hello-world",
+      "description": "Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.",
       "url": "https://hello-world.mvpkit.dev",
-      "applicationCategory": "DeveloperApplication",
+      "applicationCategory": "WebApplication",
       "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "creator": {
-        "@type": "Organization",
+      "template": {
         "name": "MVPKit",
         "url": "https://mvpkit.dev"
-      },
-      "screenshot": "https://hello-world.mvpkit.dev/og-image.png",
-      "featureList": [
-        "TypeScript Full-Stack",
-        "React Frontend",
-        "tRPC API",
-        "Cloudflare Workers Backend",
-        "Authentication",
-        "Database Integration"
-      ]
+      }
     }
     </script>
 
@@ -87,13 +71,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="referrer" content="origin-when-cross-origin" />
 
-    <!-- Preconnect to external domains for performance -->
-    <link rel="preconnect" href="https://mvpkit.dev" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-
-    <!-- Alternative versions -->
-    <link rel="alternate" type="application/rss+xml" title="MVPKit Blog" href="https://mvpkit.dev/rss.xml" />
-
     <!-- Site verification (add when available) -->
     <!-- <meta name="google-site-verification" content="your-verification-code" /> -->
     <!-- <meta name="msvalidate.01" content="your-verification-code" /> -->
@@ -101,5 +78,17 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b3e3496504ae45f4a0cb0c95f6f55fd8"}'></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JD49NYY669"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JD49NYY669');
+    </script>
   </body>
 </html>
