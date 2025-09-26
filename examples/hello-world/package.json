@@ -9,7 +9,7 @@
     "dev": "turbo dev",
     "deploy:apps": "turbo run deploy:app",
     "deploy:backend": "turbo run deploy:app --filter=@repo/api",
-    "deploy:frontend": "turbo run deploy:app --filter=@repo/web",
+    "deploy:frontend": "turbo run deploy:app --filter=@repo/app",
     "lint": "turbo lint",
     "lint:fix": "turbo run lint:fix",
     "format": "turbo format",
@@ -32,7 +32,8 @@
   "packageManager": "pnpm@10.14.0",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "services/*"
   ],
   "pnpm": {
     "overrides": {}

@@ -1,10 +1,10 @@
-name = "{{projectName}}-web"
+name = "{{projectName}}-app"
 compatibility_date = "2025-09-01"
 pages_build_output_dir = "dist"
 
 # Production environment variables
 [vars]
-VITE_API_URL = "https://{{domainName}}"
+VITE_API_URL = "https://workers.{{domainName}}"
 VITE_PROJECT_NAME = "{{projectName}}"
 VITE_DOMAIN = "{{domainName}}"
 VITE_NODE_ENV = "production"

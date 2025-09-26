@@ -1,7 +1,7 @@
 {
   "name": "@mvp-kit/core",
-  "displayName": "MVPKit Core Template",
-  "version": "0.0.1",
+  "displayName": "MVPKit - Core",
+  "version": "0.0.3",
   "description": "Full-stack TypeScript monorepo with React + Vite frontend and Cloudflare Workers backend",
   "author": "MVPKit Team",
   "repository": "https://github.com/mvp-kit/core",

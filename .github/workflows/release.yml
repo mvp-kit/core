@@ -145,9 +145,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version.outputs.version }}
-        release_name: "MVPKit Core Template ${{ steps.version.outputs.version }}"
+        release_name: "core @${{ steps.version.outputs.version }}"
         body: |
-          ## MVPKit Core Template Release
+          ## MVPKit Core - Release
 
           **Version:** ${{ steps.version.outputs.version }}
           **Commit:** ${{ github.sha }}
