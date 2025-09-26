@@ -51,6 +51,7 @@ const EXCLUDE_PATTERNS = [
   '.github/', // Don't sync GitHub workflows to example
   '.serena/', // Don't sync AI assistant directory
   'examples/', // Don't sync examples to example
+  'template.json',
   '.templateignore',
   'README.md' // Core readme is different from example readme
 ]

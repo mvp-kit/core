@@ -36,8 +36,8 @@
     { "path": "./packages/types" },
     { "path": "./packages/config" },
     { "path": "./packages/ui" },
-    { "path": "./apps/web" },
-    { "path": "./apps/api" }
+    { "path": "./apps/app" },
+    { "path": "./services/api" }
   ],
   "files": []
 }

@@ -11,11 +11,11 @@ Built with [MVPKit Core](https://mvpkit.dev) - A production-ready Cloudflare-nat
 pnpm install
 
 # Set up environment variables
-cp apps/frontend/.env.example apps/frontend/.env.local
-cp apps/backend/.dev.vars.example apps/backend/.dev.vars
+cp apps/app/.env.example apps/app/.env.local
+cp services/api/.dev.vars.example services/api/.dev.vars
 
 # Set up database (if not done during project creation)
-# cd apps/backend
+# cd services/api
 # pnpm db:migrate:local
 # pnpm db:seed:local
 
@@ -27,10 +27,11 @@ Visit [http://localhost:5173](http://localhost:5173) to see your application!
 
 ## Project Structure
 
-- `apps/frontend/` - React application with Vite
-- `apps/backend/` - Cloudflare Workers API with Hono
-- `packages/api/` - Shared API types
+- `apps/app/` - React application with Vite
+- `services/api/` - Cloudflare Workers API with Hono
+- `packages/types/` - Shared API types
 - `packages/config/` - Shared configuration
+- `packages/ui/` - Shared UI components
 
 ## Features
 
@@ -55,14 +56,14 @@ pnpm test         # Run tests
 ## Deployment
 
 ```bash
-# Deploy backend to Cloudflare Workers
-pnpm deploy:backend
+# Deploy API to Cloudflare Workers
+pnpm deploy:api
 
-# Deploy frontend to Cloudflare Pages
-pnpm deploy:frontend
+# Deploy app to Cloudflare Pages
+pnpm deploy:app
 
 # Deploy both
-pnpm deploy:apps
+pnpm deploy:all
 ```
 
 ## Learn More

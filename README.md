@@ -1,23 +1,37 @@
-# Hello World
+# MVPKit Core
 
-A new MVPKit Core application: Hello World
+A production-ready Cloudflare-native starter template for building modern web applications.
 
-Built with [MVPKit Core](https://mvpkit.dev) - A production-ready Cloudflare-native starter.
+Create your next project with MVPKit Core and get a fully-featured, type-safe application in minutes.
 
 ## Quick Start
+
+### Create a New Project
+
+```bash
+# Create a new project using MVPKit Core
+npx create-mvpkit@latest my-project
+
+# Or with other package managers
+pnpm create mvpkit my-project
+yarn create mvpkit my-project
+bun create mvpkit my-project
+```
+
+### Development Setup
 
 ```bash
 # Install dependencies
 pnpm install
 
 # Set up environment variables
-cp apps/frontend/.env.example apps/frontend/.env.local
-cp apps/backend/.dev.vars.example apps/backend/.dev.vars
+cp apps/app/.env.example apps/app/.env.local
+cp services/api/.dev.vars.example services/api/.dev.vars
 
-# Set up database (if not done during project creation)
-# cd apps/backend
-# pnpm db:migrate:local
-# pnpm db:seed:local
+# Set up database (if using database features)
+cd services/api
+pnpm db:migrate:local
+pnpm db:seed:local
 
 # Start development servers
 pnpm dev
@@ -25,12 +39,17 @@ pnpm dev
 
 Visit [http://localhost:5173](http://localhost:5173) to see your application!
 
-## Project Structure
+## Template Structure
 
-- `apps/frontend/` - React application with Vite
-- `apps/backend/` - Cloudflare Workers API with Hono
-- `packages/api/` - Shared API types
+This template includes:
+
+- `apps/app/` - React application with Vite
+- `services/api/` - Cloudflare Workers API with Hono
+- `packages/types/` - Shared API types
 - `packages/config/` - Shared configuration
+- `packages/ui/` - Shared UI components
+- `examples/` - Example implementations
+- `*.template` - Template files for project generation
 
 ## Features
 
@@ -41,6 +60,7 @@ Visit [http://localhost:5173](http://localhost:5173) to see your application!
 - 🗄️ **Database**: D1 with Drizzle ORM
 - 📡 **Type-Safe APIs**: tRPC for end-to-end type safety
 - 🏗️ **Monorepo**: Turbo for fast builds and caching
+- 📝 **Template System**: Handlebars-based project generation
 
 ## Development Commands
 
@@ -52,21 +72,70 @@ pnpm typecheck    # Type check all packages
 pnpm test         # Run tests
 ```
 
-## Deployment
+## Template Development
+
+### Working with Templates
+
+Template files use Handlebars syntax and are processed during project creation:
 
 ```bash
-# Deploy backend to Cloudflare Workers
-pnpm deploy:backend
+# Files with .template extension are processed
+package.json.template -> package.json
+tsconfig.json.template -> tsconfig.json
+```
 
-# Deploy frontend to Cloudflare Pages
-pnpm deploy:frontend
+### Template Variables
+
+Common template variables:
+- `{{projectName}}` - Project name
+- `{{projectDescription}}` - Project description
+- `{{packageManager}}` - Package manager (npm/pnpm/yarn/bun)
+- `{{packageManagerVersion}}` - Package manager version
+
+### Testing Templates
+
+```bash
+# Test template generation locally
+cd examples/hello-world
+pnpm install
+pnpm dev
+```
+
+## Examples
+
+- `examples/hello-world/` - Complete example project
+- See [MVPKit Examples](https://github.com/mvp-kit/core/examples) for more
+
+## Deployment
+
+Generated projects can be deployed to Cloudflare:
+
+```bash
+# Deploy API to Cloudflare Workers
+pnpm deploy:api
+
+# Deploy app to Cloudflare Pages
+pnpm deploy:app
 
 # Deploy both
-pnpm deploy:apps
+pnpm deploy:all
 ```
 
 ## Learn More
 
 - [MVPKit Website](https://mvpkit.dev)
 - [MVPKit Documentation](https://docs.mvpkit.dev)
-- [MVPKit Examples](https://github.com/mvp-kit/core/examples)
+- [Cloudflare Developer Platform](https://developers.cloudflare.com/)
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Test your changes with the example project
+4. Commit your changes (`git commit -m 'Add amazing feature'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
