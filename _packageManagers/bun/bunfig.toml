@@ -1,0 +1,11 @@
+# Bun configuration for monorepo
+# Bun automatically detects workspaces from package.json
+# This file is optional but can be used for additional Bun-specific settings
+
+[install]
+# Optional: Configure install behavior
+# cache = true
+
+[install.scopes]
+# Optional: Configure registry scopes for private packages
+# "@company" = { url = "https://registry.company.com/" }
