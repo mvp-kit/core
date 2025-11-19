@@ -18,10 +18,10 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "zod": "4.1.8"
+    "zod": "4.1.12"
   },
   "devDependencies": {
-    "typescript": "5.9.2"
+    "typescript": "5.9.3"
   },
   "files": [
     "dist"
