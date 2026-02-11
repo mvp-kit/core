@@ -5,34 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta Tags -->
-    <title>{{projectName}} | {{projectDescription}}</title>
-    <meta name="title" content="{{projectName}} | {{projectDescription}}" />
-    <meta name="description" content="{{projectDescription}}" />
-    <meta name="author" content="{{projectName}}" />
+    <title>{{name}} | Build and deploy MVPs faster.</title>
+    <meta name="title" content="{{name}} | Build and deploy MVPs faster." />
+    <meta name="description" content="{{description}}" />
+    <meta name="author" content="{{name}}" />
     <meta name="robots" content="index, follow" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://{{domainName}}" />
+    <link rel="canonical" href="https://{{domain}}" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://{{domainName}}" />
-    <meta property="og:title" content="{{projectName}} | {{projectDescription}}" />
-    <meta property="og:description" content="{{projectDescription}}" />
-    <meta property="og:image" content="https://{{domainName}}/og-image.png" />
+    <meta property="og:url" content="https://{{domain}}" />
+    <meta property="og:title" content="{{name}} | Build and deploy MVPs faster." />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:image" content="https://{{domain}}/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="{{projectName}}" />
+    <meta property="og:site_name" content="{{name}}" />
     <meta property="og:locale" content="en_US" />
     <meta property="article:author" content="MVPKit" />
     <meta property="article:author:url" content="https://mvpkit.dev" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://{{domainName}}" />
-    <meta property="twitter:title" content="{{projectName}} | {{projectDescription}}" />
-    <meta property="twitter:description" content="{{projectDescription}}" />
-    <meta property="twitter:image" content="https://{{domainName}}/og-image.png" />
+    <meta property="twitter:url" content="https://{{domain}}" />
+    <meta property="twitter:title" content="{{name}} | Build and deploy MVPs faster." />
+    <meta property="twitter:description" content="{{description}}" />
+    <meta property="twitter:image" content="https://{{domain}}/og-image.png" />
 
     <!-- Additional SEO -->
     <meta name="language" content="English" />
@@ -45,9 +45,9 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "{{projectName}}",
-      "description": "{{projectDescription}}",
-      "url": "https://{{domainName}}",
+      "name": "{{name}}",
+      "description": "{{description}}",
+      "url": "https://{{domain}}",
       "applicationCategory": "WebApplication",
       "operatingSystem": "Web",
       "template": {

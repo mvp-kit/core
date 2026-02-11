@@ -14,6 +14,25 @@ import { drizzle } from 'drizzle-orm/d1'
 import type { AppBindings } from '@/lib/context'
 import { schema } from '@/lib/db/schema'
 
+function normalizeDomain(input: string): string {
+  return input.replace(/^https?:\/\//, '').replace(/\/+$/, '')
+}
+
+function resolveCookieDomain(env?: AppBindings): string {
+  const explicitCookieDomain = env?.COOKIE_DOMAIN?.trim()
+  if (explicitCookieDomain) {
+    return normalizeDomain(explicitCookieDomain)
+  }
+
+  const domain = env?.DOMAIN?.trim() || 'localhost'
+  return normalizeDomain(domain)
+}
+
+function shouldEnableCrossSubDomainCookies(env?: AppBindings): boolean {
+  const domain = resolveCookieDomain(env)
+  return domain !== 'localhost' && !domain.endsWith('.localhost')
+}
+
 function createAuth(
   env?: AppBindings,
   cf?: IncomingRequestCfProperties
@@ -65,6 +84,13 @@ function createAuth(
       enabled: true,
     },
     trustedOrigins: getTrustedOrigins(env),
+    advanced: {
+      cookiePrefix: 'hello-world',
+      crossSubDomainCookies: {
+        enabled: shouldEnableCrossSubDomainCookies(env),
+        domain: resolveCookieDomain(env),
+      },
+    },
   }
 
   const config = {

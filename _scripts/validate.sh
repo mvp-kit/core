@@ -11,7 +11,14 @@
 set -e
 
 echo "🔍 Validating MVPKit Core templates..."
-npx @mvp-kit/template-validator core
+
+LOCAL_VALIDATOR="$PWD/../template-validator/dist/cli.js"
+
+if [ -f "$LOCAL_VALIDATOR" ]; then
+    node "$LOCAL_VALIDATOR" core --dir "$PWD"
+else
+    npx @mvp-kit/template-validator core
+fi
 
 if [ $? -eq 0 ]; then
     echo "✅ All templates valid!"

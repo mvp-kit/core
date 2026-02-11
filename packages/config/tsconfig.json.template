@@ -3,11 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "composite": true,
-    "lib": ["ES2022"],
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "composite": false,
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "**/*.test.*", "**/*.spec.*"],
-  "references": [{ "path": "../types" }]
+  "exclude": ["node_modules", "dist"]
 }

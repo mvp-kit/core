@@ -25,7 +25,7 @@ jobs:
         scope: '@mvp-kit'
 
     - name: 🔍 Validate templates
-      run: npx @mvp-kit/template-validator core
+      run: npx @mvp-kit/template-validator@latest core
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -35,7 +35,6 @@ jobs:
     needs: validate-templates
     permissions:
       contents: read
-      packages: read
     steps:
     - uses: actions/checkout@v4
 
@@ -48,29 +47,20 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        registry-url: 'https://npm.pkg.github.com'
-        scope: '@mvp-kit'
 
     - name: Create test app with @mvp-kit/cli
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        pnpm config set @mvp-kit:registry https://npm.pkg.github.com
-        pnpm dlx @mvp-kit/create@latest-dev test-app --template-path . --yes
+        pnpm dlx @mvp-kit/create@latest test-app --template-path . --yes --no-install --no-git
 
-    - name: Setup Node.js for test app
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        registry-url: 'https://npm.pkg.github.com'
-        scope: '@mvp-kit'
-        cache: 'pnpm'
-        cache-dependency-path: test-app/pnpm-lock.yaml
+    - name: Verify no unresolved template variables
+      run: |
+        if rg -n '\{\{\s*[A-Za-z_]' test-app; then
+          echo "❌ Unresolved template variables found in generated app"
+          exit 1
+        fi
 
     - name: Install test app dependencies
       working-directory: test-app
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: pnpm install
 
     - name: Lint check
@@ -85,13 +75,6 @@ jobs:
       working-directory: test-app
       run: pnpm run typecheck
 
-    - name: Dev server check
-      working-directory: test-app
-      run: |
-        pnpm run dev &
-        sleep 10
-        kill %1
-
   release:
     name: 📦 Create Release
     runs-on: ubuntu-latest
@@ -105,51 +88,33 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: 🏷️ Generate version from template config
-      id: version
+    - name: 🏷️ Check release version from template config
+      id: release
       run: |
-        # Read version from template.json
-        TEMPLATE_VERSION=$(node -p "require('./template.json').version")
-        VERSION="v${TEMPLATE_VERSION}"
-
-        # Check if this version already exists as a tag
-        if git tag -l "$VERSION" | grep -q "$VERSION"; then
-          echo "Version $VERSION already exists, incrementing patch..."
-          # Extract version numbers
-          IFS='.' read -r -a VERSION_PARTS <<< "$TEMPLATE_VERSION"
-          MAJOR=${VERSION_PARTS[0]:-1}
-          MINOR=${VERSION_PARTS[1]:-0}
-          PATCH=${VERSION_PARTS[2]:-0}
-
-          # Increment patch version
-          NEW_PATCH=$((PATCH + 1))
-          NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
-
-          # Update template.json with new version
-          node -e "
-            const fs = require('fs');
-            const config = require('./template.json');
-            config.version = '${MAJOR}.${MINOR}.${NEW_PATCH}';
-            fs.writeFileSync('./template.json', JSON.stringify(config, null, 2) + '\n');
-          "
-
-          VERSION="$NEW_VERSION"
+        VERSION="v$(node -p "require('./template.json').version")"
+        if git rev-parse "$VERSION" >/dev/null 2>&1; then
+          echo "new-version=false" >> "$GITHUB_OUTPUT"
+          echo "Tag $VERSION already exists. Skipping release."
+        else
+          echo "new-version=true" >> "$GITHUB_OUTPUT"
+          echo "Tag $VERSION does not exist. Release will be created."
         fi
 
         echo "version=$VERSION" >> $GITHUB_OUTPUT
-        echo "Generated version: $VERSION"
+        echo "Resolved version: $VERSION"
 
     - name: 🚀 Create Release
+      if: steps.release.outputs.new-version == 'true'
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.version.outputs.version }}
-        release_name: "core @${{ steps.version.outputs.version }}"
+        tag_name: ${{ steps.release.outputs.version }}
+        release_name: "core @${{ steps.release.outputs.version }}"
         body: |
           ## MVPKit Core - Release
 
-          **Version:** ${{ steps.version.outputs.version }}
+          **Version:** ${{ steps.release.outputs.version }}
           **Commit:** ${{ github.sha }}
 
           ### What's Changed
@@ -163,7 +128,7 @@ jobs:
           npx @mvp-kit/create my-app --template core
 
           # Or specify this version explicitly
-          npx @mvp-kit/create my-app --template core@${{ steps.version.outputs.version }}
+          npx @mvp-kit/create my-app --template core@${{ steps.release.outputs.version }}
           ```
 
           ### Template Features

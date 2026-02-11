@@ -33,10 +33,12 @@
     "disableReferencedProjectLoad": false
   },
   "references": [
-    { "path": "./packages/types" },
     { "path": "./packages/config" },
+    { "path": "./packages/types" },
     { "path": "./packages/ui" },
+    { "path": "./packages/utils" },
     { "path": "./apps/app" },
+    { "path": "./apps/web" },
     { "path": "./services/api" }
   ],
   "files": []

@@ -1,4 +1,4 @@
-name = "{{projectName}}-api"
+name = "{{name}}-api"
 main = "src/index.ts"
 compatibility_date = "2025-09-01"
 compatibility_flags = ["nodejs_compat"]
@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 # Default resources (development/local)
 [[d1_databases]]
 binding = "DB"
-database_name = "{{projectName}}-db-dev"
+database_name = "{{name}}-db-dev"
 database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "drizzle"
 
@@ -16,7 +16,7 @@ id = "0000000000000000000000000000000000"
 
 [[r2_buckets]]
 binding = "R2"
-bucket_name = "{{projectName}}-bucket-dev"
+bucket_name = "{{name}}-bucket-dev"
 
 # Local development server configuration
 [dev]
@@ -27,14 +27,16 @@ upstream_protocol = "http"
 
 # Production environment (used for deployment)
 [env.production]
-name = "{{projectName}}-api"
+name = "{{name}}-api"
 
 [env.production.vars]
 NODE_ENV = "production"
+DOMAIN = "{{domain}}"
+COOKIE_DOMAIN = "{{domain}}"
 
 [[env.production.d1_databases]]
 binding = "DB"
-database_name = "{{projectName}}-db"
+database_name = "{{name}}-db"
 database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "drizzle"
 
@@ -44,4 +46,4 @@ id = "00000000-0000-0000-0000-000000000000"
 
 [[env.production.r2_buckets]]
 binding = "R2"
-bucket_name = "{{projectName}}-bucket"
+bucket_name = "{{name}}-bucket"

@@ -7,9 +7,10 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "deploy:apps": "turbo run deploy:app",
+    "preview": "turbo preview",
+    "deploy:apps": "turbo run deploy:apps",
     "deploy:backend": "turbo run deploy:app --filter=@repo/api",
-    "deploy:frontend": "turbo run deploy:app --filter=@repo/app",
+    "deploy:frontend": "turbo run deploy:apps --filter=@repo/web",
     "lint": "turbo lint",
     "lint:fix": "turbo run lint:fix",
     "format": "turbo format",
@@ -19,8 +20,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.6",
-    "@types/fs-extra": "11.0.4",
-    "concurrently": "9.2.1",
     "turbo": "2.6.1",
     "typescript": "5.9.3"
   },
@@ -29,7 +28,7 @@
     "pnpm": ">=8.0.0",
     "bun": ">=1.0.0"
   },
-  "packageManager": "pnpm@10.22.0",
+  "packageManager": "pnpm@10.14.0",
   "workspaces": [
     "apps/*",
     "packages/*",

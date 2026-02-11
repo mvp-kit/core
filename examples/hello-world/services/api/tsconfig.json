@@ -8,14 +8,9 @@
     "composite": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@repo/config": ["../../packages/config/src"],
-      "@repo/config/*": ["../../packages/config/src/*"],
-      "@repo/types": ["../../packages/types/src"],
-      "@repo/types/*": ["../../packages/types/src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", ".wrangler"],
-  "references": [{ "path": "../../packages/types" }, { "path": "../../packages/config" }]
+  "exclude": ["node_modules", "dist", ".wrangler"]
 }
