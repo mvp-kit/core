@@ -9,3 +9,50 @@
 /* --- App-specific overrides --- */
 :root {
 }
+
+@layer base {
+  .core-page-bg {
+    background:
+      radial-gradient(1200px 500px at 50% -220px, oklch(0.93 0 0), transparent),
+      var(--background);
+  }
+
+  .dark .core-page-bg {
+    background:
+      radial-gradient(1200px 500px at 50% -220px, oklch(0.26 0 0), transparent),
+      var(--background);
+  }
+
+  .core-brand-dot {
+    display: inline-block;
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 9999px;
+    background: currentColor;
+  }
+
+  .core-logo-mark {
+    display: inline-block;
+    height: 0.9rem;
+    width: 0.9rem;
+    border-radius: 0.3rem;
+    border: 1px solid color-mix(in oklab, var(--foreground) 20%, transparent);
+    background:
+      radial-gradient(circle at 30% 28%, color-mix(in oklab, white 65%, transparent) 0 18%, transparent 45%),
+      linear-gradient(140deg, oklch(0.58 0.2 255), oklch(0.67 0.19 30));
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, white 16%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+
+  .dark .core-logo-mark {
+    border-color: color-mix(in oklab, white 22%, transparent);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, white 25%, transparent),
+      0 0 0 1px color-mix(in oklab, white 10%, transparent);
+  }
+
+  .core-test-item {
+    @apply flex items-center justify-between rounded-lg border border-border/80 bg-muted/40 p-3 text-left;
+  }
+}

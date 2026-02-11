@@ -1,7 +1,13 @@
 {
   "name": "@mvp-kit/core",
   "displayName": "MVPKit - Core",
-  "version": "0.0.3",
+  "tagline": "A production-ready starter for building modern Cloudflare-native applications.",
+  "socialGithubHandle": "@mvp-kit",
+  "socialXHandle": "@mvpkithq",
+  "socialInstagramHandle": "@mvpkit",
+  "socialTiktokHandle": "@mvpkittok",
+  "schemaTemplateUrl": "https://mvpkit.dev",
+  "version": "0.1.0",
   "description": "Full-stack TypeScript monorepo with React + Vite frontend and Cloudflare Workers backend",
   "author": "MVPKit Team",
   "repository": "https://github.com/mvp-kit/core",
@@ -10,12 +16,20 @@
     "React + Vite frontend",
     "Cloudflare Workers backend",
     "Shared UI components",
+    "Shared utility package",
     "Database integration ready",
+    "Better Auth user authentication",
     "shadcn/ui component system"
   ],
+  "baselineModules": [
+    "auth",
+    "storage",
+    "user-shell"
+  ],
+  "optionalPacks": [],
   "componentPacks": {
     "basic": {
-      "description": "Essential UI components for basic layouts",
+      "description": "Essential UI components for core dashboard and web surfaces",
       "components": [
         "button",
         "card",

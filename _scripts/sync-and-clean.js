@@ -18,6 +18,10 @@ const TEMPLATE_ROOT = '.'
 
 // Variables used in hello-world example
 const EXAMPLE_VALUES = {
+  name: 'hello-world',
+  description: 'Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.',
+  domain: 'hello-world.mvpkit.dev',
+  tagline: 'Build and deploy MVPs faster.',
   projectName: 'hello-world',
   projectDescription: 'Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.',
   domainName: 'hello-world.mvpkit.dev',
@@ -58,36 +62,36 @@ const PRESERVE_FILES = [
   '.serena/',
   'examples/',
   '.gitignore',
-  'README.md'
+  'README.md',
+  'template.json',
+  'packages/utils/README.md'
 ]
 
 function escapeRegex(string) {
-  return string.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 function reverseTemplate(content, values) {
   let result = content
 
-  // Systematically replace all variable values with template variables
-  // Process in order from most specific to most general
+  // Replace concrete example values with canonical template variables.
+  // Order matters: replace longer/specific strings first to avoid partial overlaps.
+  const replacements = [
+    [values.description, '{{description}}'],
+    [values.tagline, '{{tagline}}'],
+    [values.domain, '{{domain}}'],
+    [values.packageManagerVersion, '{{packageManagerVersion}}'],
+    [values.name, '{{name}}']
+  ]
 
-  // 1. Replace exact quoted strings first
-  result = result.replace(new RegExp(`"${escapeRegex(values.projectDescription)}"`, 'g'), '"{{projectDescription}}"')
+  for (const [rawValue, token] of replacements) {
+    result = result.replace(new RegExp(escapeRegex(rawValue), 'g'), token)
+  }
 
-  // 2. Replace domain name (escape dots for regex)
-  result = result.replace(new RegExp(escapeRegex(values.domainName), 'g'), '{{domainName}}')
+  // Ensure packageManager field uses variable token if present as concrete value.
+  result = result.replace(new RegExp(`"${escapeRegex(values.packageManager)}@`, 'g'), '"{{packageManager}}@')
 
-  // 3. Replace package manager version (escape dots)
-  result = result.replace(new RegExp(escapeRegex(values.packageManagerVersion), 'g'), '{{packageManagerVersion}}')
-
-  // 4. Replace project name in all contexts
-  result = result.replace(new RegExp(escapeRegex(values.projectName), 'g'), '{{projectName}}')
-
-  // 5. Fix packageManager field specifically (it should not be projectName)
-  result = result.replace(/"packageManager": "{{projectName}}@/g, `"packageManager": "${values.packageManager}@`)
-  result = result.replace(new RegExp(`"${values.packageManager}@`, 'g'), '"{{packageManager}}@')
-
-  // 6. Handle package manager conditionals
+  // Handle package manager conditionals
   if (result.includes('"pnpm":')) {
     result = result.replace(
       /,\s*"pnpm": \{\s*"overrides": \{\}\s*\}/,
@@ -95,21 +99,10 @@ function reverseTemplate(content, values) {
     )
   }
 
-  // 7. Handle baseUrl in vite.config.mts (construct from domainName)
-  if (result.includes(`https://${values.domainName}`)) {
-    result = result.replace(
-      new RegExp(`'https://${escapeRegex(values.domainName)}'`, 'g'),
-      "'https://{{domainName}}'"
-    )
-  }
-
-  // 8. Handle domain URLs in HTML and other files (without quotes)
-  if (result.includes(`https://${values.domainName}`)) {
-    result = result.replace(
-      new RegExp(`https://${escapeRegex(values.domainName)}`, 'g'),
-      'https://{{domainName}}'
-    )
-  }
+  // Normalize any legacy placeholders back to canonical placeholders.
+  result = result.replace(/\{\{\s*projectName\s*\}\}/g, '{{name}}')
+  result = result.replace(/\{\{\s*projectDescription\s*\}\}/g, '{{description}}')
+  result = result.replace(/\{\{\s*domainName\s*\}\}/g, '{{domain}}')
 
   return result
 }
@@ -154,6 +147,12 @@ function getAllFiles(dir, baseDir = dir) {
 }
 
 function getTemplatePath(examplePath) {
+  // If a corresponding .template file already exists, always sync back to it.
+  const existingTemplateVariant = path.join(TEMPLATE_ROOT, `${examplePath}.template`)
+  if (fs.existsSync(existingTemplateVariant)) {
+    return `${examplePath}.template`
+  }
+
   // Handle package manager specific files - put them in _packageManagers/
   if (examplePath === 'pnpm-workspace.yaml') {
     return '_packageManagers/pnpm/pnpm-workspace.yaml'

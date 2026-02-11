@@ -1,0 +1,26 @@
+import { Button } from '@repo/ui/components/ui/button'
+import { Link } from '@tanstack/react-router'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { appPath } from '@/lib/config/paths'
+
+export function SiteHeader() {
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/85 backdrop-blur">
+      <div className="mx-auto flex h-12 w-full max-w-5xl items-center justify-between px-4">
+        <Link to="/" className="inline-flex items-center gap-2">
+          <span className="core-logo-mark" aria-hidden="true" />
+          <span className="text-sm font-semibold tracking-tight">{{name}}</span>
+          <span className="rounded-full border border-border px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+            Core
+          </span>
+        </Link>
+        <div className="flex items-center justify-end gap-2">
+          <ThemeToggle />
+          <Button asChild variant="outline" size="sm" className="h-8 rounded-md px-3">
+            <a href={appPath('/auth/sign-in')}>Sign In</a>
+          </Button>
+        </div>
+      </div>
+    </header>
+  )
+}

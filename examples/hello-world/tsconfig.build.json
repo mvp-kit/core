@@ -7,9 +7,10 @@
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "references": [
-    { "path": "./packages/types" },
     { "path": "./packages/config" },
-    { "path": "./packages/ui" }
+    { "path": "./packages/types" },
+    { "path": "./packages/ui" },
+    { "path": "./packages/utils" }
   ],
   "files": []
 }

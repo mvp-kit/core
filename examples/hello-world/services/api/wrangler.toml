@@ -31,16 +31,18 @@ name = "hello-world-api"
 
 [env.production.vars]
 NODE_ENV = "production"
+DOMAIN = "hello-world.mvpkit.dev"
+COOKIE_DOMAIN = "hello-world.mvpkit.dev"
 
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "hello-world-db"
-database_id = "5d0f12a0-75e4-4499-add7-b18436cb8834"
+database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "drizzle"
 
 [[env.production.kv_namespaces]]
 binding = "KV"
-id = "04cba09893334fd48e8edc2414a01275"
+id = "00000000-0000-0000-0000-000000000000"
 
 [[env.production.r2_buckets]]
 binding = "R2"

@@ -1,8 +1,8 @@
 {
   "name": "@repo/types",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
-  "description": "{{projectName}} - types",
+  "description": "{{name}} - types",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -26,5 +26,29 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./types/*": "./dist/types/*.js",
+    "./schemas/*": "./dist/schemas/*.js",
+    "./router": "./dist/router.js",
+    "./frontend": "./dist/frontend.js"
+  },
+  "sideEffects": false,
+  "typesVersions": {
+    "*": {
+      "types/*": [
+        "./dist/types/*"
+      ],
+      "schemas/*": [
+        "./dist/schemas/*"
+      ],
+      "router": [
+        "./dist/router.d.ts"
+      ],
+      "frontend": [
+        "./dist/frontend.d.ts"
+      ]
+    }
+  }
 }

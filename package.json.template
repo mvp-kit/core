@@ -1,15 +1,16 @@
 {
-  "name": "{{projectName}}",
+  "name": "{{name}}",
   "version": "1.0.0",
-  "description": "{{projectDescription}}",
+  "description": "{{description}}",
   "private": false,
   "type": "module",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "deploy:apps": "turbo run deploy:app",
+    "preview": "turbo preview",
+    "deploy:apps": "turbo run deploy:apps",
     "deploy:backend": "turbo run deploy:app --filter=@repo/api",
-    "deploy:frontend": "turbo run deploy:app --filter=@repo/app",
+    "deploy:frontend": "turbo run deploy:apps --filter=@repo/web",
     "lint": "turbo lint",
     "lint:fix": "turbo run lint:fix",
     "format": "turbo format",
@@ -19,8 +20,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.6",
-    "@types/fs-extra": "11.0.4",
-    "concurrently": "9.2.1",
     "turbo": "2.6.1",
     "typescript": "5.9.3"
   },

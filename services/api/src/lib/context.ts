@@ -11,6 +11,7 @@ export interface AppBindings {
   NODE_ENV?: string
   DOMAIN?: string
   TRUSTED_ORIGINS?: string
+  COOKIE_DOMAIN?: string
 }
 
 export type AppVariables = {

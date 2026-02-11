@@ -28,8 +28,8 @@ echo "✅ Wrangler authentication confirmed"
 echo "📧 Logged in as: $(echo "$AUTH_STATUS" | head -1)"
 
 # Get project configuration from wrangler.toml template variables
-WORKERS_NAME="{{projectName}}-backend"
-PROJECT_KEBAB="{{projectName}}"
+WORKERS_NAME="{{name}}-backend"
+PROJECT_KEBAB="{{name}}"
 KV_NAMESPACE_ID=""
 
 # Generate resource names

@@ -1,12 +1,13 @@
 {
   "name": "@repo/api",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
-  "description": "{{projectName}} - backend",
+  "description": "{{name}} - backend",
   "scripts": {
     "build": "tsc --noEmit",
-    "deploy:app": "wrangler d1 migrations apply {{projectName}}-db --env production --remote || echo 'No migrations to apply' && wrangler deploy --env production",
-    "dev": "wrangler dev",
+    "deploy:app": "wrangler d1 migrations apply {{name}}-db --env production --remote || echo 'No migrations to apply' && wrangler deploy --env production",
+    "dev": "wrangler dev --port 3011",
+    "preview": "wrangler dev --port 3011",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format .",
@@ -15,16 +16,14 @@
     "clean": "rm -rf .wrangler dist",
     "db:init": "mkdir -p .wrangler/state/v3/d1/miniflare-D1DatabaseObject && echo 'Local D1 database initialized'",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "wrangler d1 migrations apply {{projectName}}-db --env production --remote",
-    "db:migrate:local": "wrangler d1 migrations apply {{projectName}}-db-dev --local",
-    "db:execute:local": "wrangler d1 execute {{projectName}}-db-dev --local",
+    "db:migrate": "wrangler d1 migrations apply {{name}}-db --env production --remote",
+    "db:migrate:local": "wrangler d1 migrations apply {{name}}-db-dev --local",
+    "db:execute:local": "wrangler d1 execute {{name}}-db-dev --local",
     "db:studio": "drizzle-kit studio",
     "db:studio:local": "drizzle-kit studio"
   },
   "dependencies": {
     "@hono/trpc-server": "0.4.0",
-    "@repo/types": "workspace:*",
-    "@repo/config": "workspace:*",
     "@trpc/server": "11.7.1",
     "better-auth": "1.3.34",
     "better-auth-cloudflare": "0.2.8",
@@ -33,12 +32,10 @@
     "zod": "4.1.12"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.15.0",
     "@cloudflare/workers-types": "4.20251119.0",
     "@types/node": "24.10.1",
     "drizzle-kit": "0.31.7",
     "typescript": "5.9.3",
-    "vite": "7.2.2",
     "wrangler": "4.49.0"
   }
 }

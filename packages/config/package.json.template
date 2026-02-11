@@ -1,8 +1,8 @@
 {
   "name": "@repo/config",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
-  "description": "{{projectName}} - config",
+  "description": "{{name}} - shared runtime config",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -18,12 +18,30 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "zod": "4.1.12"
+    "@tanstack/react-query": "5.90.10",
+    "@tanstack/react-query-devtools": "5.90.2",
+    "@tanstack/react-router": "1.136.11",
+    "@trpc/client": "11.7.1"
+  },
+  "peerDependencies": {
+    "react": ">=19.2.0",
+    "react-dom": ">=19.2.0"
   },
   "devDependencies": {
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
     "typescript": "5.9.3"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./bootstrap": "./dist/bootstrap.js",
+    "./providers-factory": "./dist/providers-factory.js",
+    "./query-client": "./dist/query-client.js",
+    "./theme": "./dist/theme.js",
+    "./trpc-client": "./dist/trpc-client.js"
+  },
+  "sideEffects": false
 }

@@ -1,0 +1,29 @@
+{
+  "name": "@repo/utils",
+  "version": "0.0.1",
+  "private": true,
+  "description": "{{name}} - shared utilities",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  },
+  "files": [
+    "dist"
+  ]
+}
