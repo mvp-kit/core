@@ -2,15 +2,6 @@ name = "{{name}}-web"
 pages_build_output_dir = "./dist"
 compatibility_date = "2025-09-01"
 
-[vars]
-VITE_PROJECT_NAME = "{{name}}-web"
-VITE_DOMAIN = "{{domain}}"
-VITE_APP_DOMAIN = "app.{{domain}}"
-VITE_NODE_ENV = "production"
-VITE_FRONTEND_PORT = "3001"
-VITE_ALLOWED_HOSTS = "{{domain}},*.{{domain}}"
-SESSION_COOKIE_NAME = "{{name}}.session_token"
-
 [[services]]
 binding = "API"
 service = "{{name}}-api"

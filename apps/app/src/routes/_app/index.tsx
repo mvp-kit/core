@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@repo/ui/components/ui/card'
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import { trpc } from '@/lib/trpc'
 
 export const Route = createFileRoute('/_app/')({
@@ -15,7 +16,18 @@ export const Route = createFileRoute('/_app/')({
 })
 
 function AppHome() {
-  const ping = trpc.ping.useQuery()
+  const ping = trpc.ping.useQuery(undefined, {
+    enabled: false,
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+  const [status, setStatus] = useState<'idle' | 'running' | 'success' | 'failure'>('idle')
+
+  const runApiHealthCheck = async () => {
+    setStatus('running')
+    const result = await ping.refetch()
+    setStatus(result.error ? 'failure' : 'success')
+  }
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-5">
@@ -41,13 +53,47 @@ function AppHome() {
               <p className="text-sm font-medium">API Health</p>
               <p className="text-xs text-muted-foreground">tRPC ping endpoint</p>
             </div>
-            <Button type="button" size="sm" className="h-8 px-3" onClick={() => ping.refetch()}>
-              Test
+            <Button
+              type="button"
+              size="sm"
+              className="h-8 px-3"
+              onClick={runApiHealthCheck}
+              disabled={status === 'running'}
+            >
+              {status === 'running' ? 'Testing...' : 'Test'}
             </Button>
           </div>
 
-          <div className="rounded-lg border border-border/80 bg-muted/35 px-3 py-2 text-sm">
-            {ping.isLoading ? 'Checking API status...' : (ping.data?.message ?? 'No response yet')}
+          <div className="rounded-lg border border-border/80 bg-muted/35 px-3 py-3 text-sm">
+            <div className="flex items-center justify-between gap-2">
+              <Badge
+                variant={
+                  status === 'success'
+                    ? 'default'
+                    : status === 'failure'
+                      ? 'destructive'
+                      : 'secondary'
+                }
+              >
+                {status === 'running'
+                  ? 'Testing'
+                  : status === 'success'
+                    ? 'Success'
+                    : status === 'failure'
+                      ? 'Failure'
+                      : 'Not tested'}
+              </Badge>
+            </div>
+
+            <p className="mt-2 text-sm">
+              {status === 'running'
+                ? 'Running API health check...'
+                : status === 'success'
+                  ? (ping.data?.message ?? 'Core API is running')
+                  : status === 'failure'
+                    ? 'Could not reach the API. Please try again.'
+                    : 'Click Test to verify API connectivity.'}
+            </p>
           </div>
         </CardContent>
       </Card>

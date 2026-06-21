@@ -8,8 +8,29 @@ export const Route = createFileRoute('/contact')({
 function ContactPage() {
   return (
     <SiteLayout>
-      <h1 className="text-2xl font-semibold tracking-tight">Contact</h1>
-      <p className="mt-2 text-muted-foreground">Reach us at support@example.com</p>
+      <section className="mx-auto w-full max-w-3xl py-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Contact</h1>
+        <p className="mt-2 text-muted-foreground">
+          Need help with hello-world? Reach out and we'll point you in the right direction.
+        </p>
+
+        <div className="mt-6 grid gap-4 text-sm sm:grid-cols-2">
+          <div className="rounded-lg border border-border/80 bg-card p-4">
+            <h2 className="font-medium">Support</h2>
+            <p className="mt-2 text-muted-foreground">
+              Product questions, bug reports, and account support.
+            </p>
+            <p className="mt-2 font-medium text-foreground">support@hello-world.mvpkit.dev</p>
+          </div>
+          <div className="rounded-lg border border-border/80 bg-card p-4">
+            <h2 className="font-medium">Legal</h2>
+            <p className="mt-2 text-muted-foreground">
+              Legal notices, privacy requests, and compliance inquiries.
+            </p>
+            <p className="mt-2 font-medium text-foreground">legal@hello-world.mvpkit.dev</p>
+          </div>
+        </div>
+      </section>
     </SiteLayout>
   )
 }

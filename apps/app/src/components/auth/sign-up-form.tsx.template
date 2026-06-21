@@ -43,6 +43,7 @@ export function SignUpForm() {
         <Label htmlFor="name">Name</Label>
         <Input
           id="name"
+          className="bg-background text-foreground"
           placeholder="Enter your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -53,6 +54,7 @@ export function SignUpForm() {
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
+          className="bg-background text-foreground"
           type="email"
           autoComplete="email"
           placeholder="Enter your email"
@@ -65,6 +67,7 @@ export function SignUpForm() {
         <Label htmlFor="password">Password</Label>
         <Input
           id="password"
+          className="bg-background text-foreground"
           type="password"
           autoComplete="new-password"
           placeholder="Create a password"

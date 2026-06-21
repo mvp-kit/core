@@ -14,23 +14,60 @@ import { drizzle } from 'drizzle-orm/d1'
 import type { AppBindings } from '@/lib/context'
 import { schema } from '@/lib/db/schema'
 
+function requireEnv(name: string, value: string | undefined): string {
+  const resolved = value?.trim()
+  if (!resolved) {
+    throw new Error(`${name} must be configured`)
+  }
+
+  return resolved
+}
+
 function normalizeDomain(input: string): string {
   return input.replace(/^https?:\/\//, '').replace(/\/+$/, '')
 }
 
-function resolveCookieDomain(env?: AppBindings): string {
-  const explicitCookieDomain = env?.COOKIE_DOMAIN?.trim()
-  if (explicitCookieDomain) {
-    return normalizeDomain(explicitCookieDomain)
-  }
-
-  const domain = env?.DOMAIN?.trim() || 'localhost'
-  return normalizeDomain(domain)
+function isLocalHost(host: string): boolean {
+  return host === 'localhost' || host === '127.0.0.1' || host.endsWith('.localhost')
 }
 
-function shouldEnableCrossSubDomainCookies(env?: AppBindings): boolean {
-  const domain = resolveCookieDomain(env)
-  return domain !== 'localhost' && !domain.endsWith('.localhost')
+function isLocalOrigin(origin: string): boolean {
+  try {
+    return isLocalHost(new URL(origin).hostname)
+  } catch {
+    return false
+  }
+}
+
+function resolveCookieDomain(env: AppBindings, trustedOrigins: string[], nodeEnv: string): string {
+  const configuredDomain = normalizeDomain(requireEnv('COOKIE_DOMAIN', env.COOKIE_DOMAIN))
+  if (nodeEnv !== 'production' && trustedOrigins.some(isLocalOrigin)) {
+    return 'localhost'
+  }
+  return configuredDomain
+}
+
+function shouldEnableCrossSubDomainCookies(domain: string): boolean {
+  return !isLocalHost(domain)
+}
+
+function getTrustedOrigins(env: AppBindings): string[] {
+  const trustedOrigins = requireEnv('TRUSTED_ORIGINS', env.TRUSTED_ORIGINS)
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+
+  if (trustedOrigins.length === 0) {
+    throw new Error('TRUSTED_ORIGINS must contain at least one origin')
+  }
+
+  return trustedOrigins
+}
+
+function validateRuntimeConfig(env: AppBindings): string {
+  const nodeEnv = requireEnv('NODE_ENV', env.NODE_ENV)
+  requireEnv('DOMAIN', env.DOMAIN)
+  return nodeEnv
 }
 
 function createAuth(
@@ -39,24 +76,12 @@ function createAuth(
 ): ReturnType<typeof betterAuth> {
   // biome-ignore lint/suspicious/noExplicitAny: needed for fallback type
   const db = env ? drizzle(env.DB, { schema, logger: false }) : ({} as any)
-
-  // Simple helper to get trusted origins without createServerConfig
-  const getTrustedOrigins = (env?: AppBindings) => {
-    if (!env) return ['localhost:*']
-
-    const nodeEnv = env.NODE_ENV || 'development'
-    const domain = env.DOMAIN || 'hello-world.mvpkit.dev'
-    const trustedOrigins = env.TRUSTED_ORIGINS
-
-    if (trustedOrigins) {
-      return trustedOrigins.split(',').map((s: string) => s.trim())
-    }
-
-    if (nodeEnv === 'production') {
-      return [`https://${domain}`, `https://*.${domain}`]
-    }
-
-    return [`localhost:*`, `https://${domain}`, `https://*.${domain}`]
+  let trustedOrigins = ['localhost:*']
+  let cookieDomain = 'localhost'
+  if (env) {
+    const nodeEnv = validateRuntimeConfig(env)
+    trustedOrigins = getTrustedOrigins(env)
+    cookieDomain = resolveCookieDomain(env, trustedOrigins, nodeEnv)
   }
 
   // Cloudflare configuration
@@ -83,12 +108,12 @@ function createAuth(
     rateLimit: {
       enabled: true,
     },
-    trustedOrigins: getTrustedOrigins(env),
+    trustedOrigins,
     advanced: {
       cookiePrefix: 'hello-world',
       crossSubDomainCookies: {
-        enabled: shouldEnableCrossSubDomainCookies(env),
-        domain: resolveCookieDomain(env),
+        enabled: shouldEnableCrossSubDomainCookies(cookieDomain),
+        domain: cookieDomain,
       },
     },
   }

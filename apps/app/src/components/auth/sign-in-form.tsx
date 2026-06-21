@@ -42,6 +42,7 @@ export function SignInForm() {
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
+          className="bg-background text-foreground"
           type="email"
           autoComplete="email"
           placeholder="Enter your email"
@@ -54,6 +55,7 @@ export function SignInForm() {
         <Label htmlFor="password">Password</Label>
         <Input
           id="password"
+          className="bg-background text-foreground"
           type="password"
           autoComplete="current-password"
           placeholder="Enter your password"

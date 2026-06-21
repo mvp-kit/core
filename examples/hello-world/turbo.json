@@ -49,10 +49,6 @@
       "outputs": []
     },
     "deploy": {
-      "dependsOn": ["build:validate"],
-      "cache": false
-    },
-    "deploy:app": {
       "dependsOn": ["build"],
       "cache": false
     },

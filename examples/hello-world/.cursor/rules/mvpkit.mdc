@@ -1,0 +1,20 @@
+---
+description: MVPKit Core coding rules
+globs:
+  - "**/*"
+alwaysApply: false
+---
+
+Read `AGENTS.md` before edits.
+
+Then use:
+
+1. `docs/llm/context-map.md`
+2. `docs/llm/change-playbooks.md`
+
+Preserve:
+
+- Type contracts in `packages/types`
+- Router contracts in `services/api/src/trpc`
+- Baseline modules (auth, storage, user-shell)
+

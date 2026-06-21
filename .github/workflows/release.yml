@@ -24,6 +24,9 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
         scope: '@mvp-kit'
 
+    - name: 🧠 Verify generated LLM docs are in sync
+      run: node docs/scripts/context-sync.mjs --mode check
+
     - name: 🔍 Validate templates
       run: npx @mvp-kit/template-validator@latest core
       env:
@@ -51,6 +54,25 @@ jobs:
     - name: Create test app with @mvp-kit/cli
       run: |
         pnpm dlx @mvp-kit/create@latest test-app --template-path . --yes --no-install --no-git
+
+    - name: Verify generated AI context files
+      run: |
+        required_files=(
+          "AGENTS.md"
+          "CLAUDE.md"
+          "CODEX.md"
+          ".cursor/rules/mvpkit.mdc"
+          "llms.txt"
+          "docs/llm/context-map.md"
+          "docs/llm/change-playbooks.md"
+        )
+
+        for file in "${required_files[@]}"; do
+          if [ ! -f "test-app/${file}" ]; then
+            echo "❌ Missing generated AI context file: ${file}"
+            exit 1
+          fi
+        done
 
     - name: Verify no unresolved template variables
       run: |

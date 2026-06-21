@@ -8,10 +8,10 @@ export interface AppBindings {
   KV: KVNamespace
   R2: R2Bucket
   // Environment variables for configuration
-  NODE_ENV?: string
-  DOMAIN?: string
-  TRUSTED_ORIGINS?: string
-  COOKIE_DOMAIN?: string
+  NODE_ENV: string
+  DOMAIN: string
+  TRUSTED_ORIGINS: string
+  COOKIE_DOMAIN: string
 }
 
 export type AppVariables = {

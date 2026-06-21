@@ -33,6 +33,11 @@ const EXAMPLE_VALUES = {
 	packageManagerVersion: "10.14.0",
 };
 
+const REQUIRED_LLM_TEMPLATE_DOCS = [
+	"docs/llm/context-map.md.template",
+	"docs/llm/change-playbooks.md.template",
+];
+
 // Files/patterns to exclude from template sync (system files, build artifacts)
 const EXCLUDE_PATTERNS = [
 	"node_modules/",
@@ -190,6 +195,18 @@ function getExamplePath(templatePath) {
 	}
 
 	return templatePath;
+}
+
+function assertRequiredTemplateDocsExist() {
+	const missing = REQUIRED_LLM_TEMPLATE_DOCS.filter((file) => !fs.existsSync(path.join(TEMPLATE_ROOT, file)));
+	if (missing.length === 0) return;
+
+	console.error("\n❌ Missing required LLM template docs. Cleanup aborted to prevent accidental deletion:");
+	for (const file of missing) {
+		console.error(`   - ${file}`);
+	}
+	console.error("Run: node docs/scripts/context-sync.mjs --mode write-template");
+	process.exit(1);
 }
 
 function syncTemplateToExample(templatePath) {
@@ -384,6 +401,7 @@ for (const file of templateFiles) {
 }
 
 // Clean up orphaned example files (disabled - too aggressive for now)
+assertRequiredTemplateDocsExist();
 cleanupOrphanedExampleFiles(templateFiles);
 
 console.log(

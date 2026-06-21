@@ -12,6 +12,9 @@ set -e
 
 echo "🔍 Validating MVPKit Core templates..."
 
+echo "🧠 Checking generated LLM docs..."
+node docs/scripts/context-sync.mjs --mode check
+
 LOCAL_VALIDATOR="$PWD/../template-validator/dist/cli.js"
 
 if [ -f "$LOCAL_VALIDATOR" ]; then

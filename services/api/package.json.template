@@ -5,7 +5,7 @@
   "description": "{{name}} - backend",
   "scripts": {
     "build": "tsc --noEmit",
-    "deploy:app": "wrangler d1 migrations apply {{name}}-db --env production --remote || echo 'No migrations to apply' && wrangler deploy --env production",
+    "deploy": "wrangler d1 migrations apply {{name}}-db --env production --remote || echo 'No migrations to apply' && wrangler deploy --env production",
     "dev": "wrangler dev --port 3011",
     "preview": "wrangler dev --port 3011",
     "lint": "biome check .",
@@ -32,10 +32,10 @@
     "zod": "4.1.12"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20251119.0",
+    "@cloudflare/workers-types": "4.20260219.0",
     "@types/node": "24.10.1",
     "drizzle-kit": "0.31.7",
     "typescript": "5.9.3",
-    "wrangler": "4.49.0"
+    "wrangler": "4.67.0"
   }
 }

@@ -60,11 +60,17 @@ const PRESERVE_FILES = [
   '_scripts/',
   '.github/',
   '.serena/',
+  '.cursor/',
   'examples/',
   '.gitignore',
   'README.md',
   'template.json',
-  'packages/utils/README.md'
+  'packages/utils/README.md',
+  'AGENTS.md.template',
+  'CLAUDE.md.template',
+  'CODEX.md.template',
+  'llms.txt.template',
+  'docs/llm/'
 ]
 
 function escapeRegex(string) {

@@ -1,0 +1,15 @@
+# CODEX.md
+
+Codex adapter for MVPKit template projects.
+
+Read in order:
+
+1. `AGENTS.md`
+2. `docs/llm/context-map.md`
+3. `docs/llm/change-playbooks.md`
+
+Execution policy:
+
+- Keep changes scoped and type-safe.
+- Prefer existing package/workspace conventions.
+- Run `pnpm run typecheck` before proposing completion for major edits.

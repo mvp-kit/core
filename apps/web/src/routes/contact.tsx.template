@@ -1,0 +1,36 @@
+import { createFileRoute } from '@tanstack/react-router'
+import { SiteLayout } from '@/components/layout'
+
+export const Route = createFileRoute('/contact')({
+  component: ContactPage,
+})
+
+function ContactPage() {
+  return (
+    <SiteLayout>
+      <section className="mx-auto w-full max-w-3xl py-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Contact</h1>
+        <p className="mt-2 text-muted-foreground">
+          Need help with {{name}}? Reach out and we'll point you in the right direction.
+        </p>
+
+        <div className="mt-6 grid gap-4 text-sm sm:grid-cols-2">
+          <div className="rounded-lg border border-border/80 bg-card p-4">
+            <h2 className="font-medium">Support</h2>
+            <p className="mt-2 text-muted-foreground">
+              Product questions, bug reports, and account support.
+            </p>
+            <p className="mt-2 font-medium text-foreground">support@{{domain}}</p>
+          </div>
+          <div className="rounded-lg border border-border/80 bg-card p-4">
+            <h2 className="font-medium">Legal</h2>
+            <p className="mt-2 text-muted-foreground">
+              Legal notices, privacy requests, and compliance inquiries.
+            </p>
+            <p className="mt-2 font-medium text-foreground">legal@{{domain}}</p>
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  )
+}

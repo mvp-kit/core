@@ -32,12 +32,22 @@ show_help() {
 
 case "$1" in
     "to-example")
+        echo "🧠 Regenerating template LLM docs..."
+        node docs/scripts/context-sync.mjs --mode write-template
         echo "🔄 Syncing templates → hello-world example..."
         node _scripts/sync-template-to-example.js
+        echo "🧠 Regenerating example LLM docs..."
+        node docs/scripts/context-sync.mjs --mode write-example
         ;;
     "from-example")
         echo "🔄 Syncing hello-world example → templates..."
         node _scripts/sync-and-clean.js
+        echo "🧠 Regenerating template LLM docs..."
+        node docs/scripts/context-sync.mjs --mode write-template
+        echo "🧠 Regenerating example LLM docs..."
+        node docs/scripts/context-sync.mjs --mode write-example
+        echo "🔍 Validating templates..."
+        ./_scripts/validate.sh
         ;;
     "validate")
         echo "🔍 Validating templates..."

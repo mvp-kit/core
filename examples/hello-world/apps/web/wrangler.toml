@@ -2,15 +2,6 @@ name = "hello-world-web"
 pages_build_output_dir = "./dist"
 compatibility_date = "2025-09-01"
 
-[vars]
-VITE_PROJECT_NAME = "hello-world-web"
-VITE_DOMAIN = "hello-world.mvpkit.dev"
-VITE_APP_DOMAIN = "app.hello-world.mvpkit.dev"
-VITE_NODE_ENV = "production"
-VITE_FRONTEND_PORT = "3001"
-VITE_ALLOWED_HOSTS = "hello-world.mvpkit.dev,*.hello-world.mvpkit.dev"
-SESSION_COOKIE_NAME = "hello-world.session_token"
-
 [[services]]
 binding = "API"
 service = "hello-world-api"
