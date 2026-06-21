@@ -44,13 +44,29 @@
       "inputs": []
     },
     "typecheck": {
-      "dependsOn": [],
+      "dependsOn": ["^build"],
       "inputs": ["src/**", "**/*.ts", "**/*.tsx", "tsconfig.json", "package.json"],
       "outputs": []
     },
     "deploy": {
       "dependsOn": ["build"],
       "cache": false
+    },
+    "setup:remote": {
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:migrate:local": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
     },
     "clean": {
       "cache": false

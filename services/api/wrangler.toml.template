@@ -34,6 +34,7 @@ name = "{{name}}-api"
 NODE_ENV = "production"
 DOMAIN = "{{domain}}"
 COOKIE_DOMAIN = "{{domain}}"
+TRUSTED_ORIGINS = "https://{{domain}},https://app.{{domain}},https://www.{{domain}}"
 
 [[env.production.d1_databases]]
 binding = "DB"

@@ -29,8 +29,8 @@ const AuthAuthViewRoute = AuthAuthViewRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/auth/$authView': typeof AuthAuthViewRoute
   '/': typeof AppIndexRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
 }
 export interface FileRoutesByTo {
   '/auth/$authView': typeof AuthAuthViewRoute
@@ -44,7 +44,7 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/auth/$authView' | '/'
+  fullPaths: '/' | '/auth/$authView'
   fileRoutesByTo: FileRoutesByTo
   to: '/auth/$authView' | '/'
   id: '__root__' | '/_app' | '/auth/$authView' | '/_app/'
@@ -60,7 +60,7 @@ declare module '@tanstack/react-router' {
     '/_app': {
       id: '/_app'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }

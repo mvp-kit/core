@@ -70,10 +70,7 @@ function validateRuntimeConfig(env: AppBindings): string {
   return nodeEnv
 }
 
-function createAuth(
-  env?: AppBindings,
-  cf?: IncomingRequestCfProperties
-): ReturnType<typeof betterAuth> {
+function createAuth(env?: AppBindings, cf?: IncomingRequestCfProperties) {
   // biome-ignore lint/suspicious/noExplicitAny: needed for fallback type
   const db = env ? drizzle(env.DB, { schema, logger: false }) : ({} as any)
   let trustedOrigins = ['localhost:*']
@@ -135,7 +132,7 @@ function createAuth(
 }
 
 // Export for CLI Schema ONLY
-export const auth: ReturnType<typeof betterAuth> = createAuth()
+export const auth = createAuth()
 export default auth
 
 // Export for runtime usage

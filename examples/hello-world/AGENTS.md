@@ -4,7 +4,7 @@ This project was generated from MVPKit Core.
 
 ## Mission
 
-Prioritize production-safe edits for template builders. Keep API and type contracts coherent before UI polish.
+Make production-safe changes that keep the app, API, and shared contracts coherent. Prefer small, typed edits that preserve the Cloudflare runtime model.
 
 ## Source Of Truth
 
@@ -21,10 +21,14 @@ Prioritize production-safe edits for template builders. Keep API and type contra
 
 ## Working Rules
 
-- Prefer incremental changes with explicit type safety.
-- Do not remove baseline modules without updating router contracts.
-- Use `pnpm` scripts for validation.
-- Keep generated files and template placeholders intact.
+- Keep request/response contracts in `packages/types` aligned with tRPC implementation in `services/api/src/trpc`.
+- Keep Cloudflare bindings, auth, database, and storage behavior inside `services/api`.
+- Keep frontend code behind typed clients; do not import Worker-only modules into `apps/*`.
+- Preserve baseline modules unless the router contracts, docs, and UI call sites are updated together.
+- Keep generated files in sync by running the documented generator instead of hand-editing generated output.
+- Preserve template placeholders and package-manager conditionals when editing template files.
+- Use `bun` scripts for validation. For broad changes, run `bun run check`.
+- Do not add secrets, account IDs, or environment-specific credentials to source control.
 
 ## Runtime Details
 

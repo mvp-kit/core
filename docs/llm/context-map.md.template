@@ -12,6 +12,13 @@ Template version: `0.1.0`
 - `services/api`: Cloudflare Worker API (pipeline: `services/api/src/app.ts`)
 - `packages/*`: shared contracts, UI, and bootstrap helpers
 
+## Boundaries
+
+- Public API shape: `packages/types/src/router.ts`
+- API implementation: `services/api/src/trpc`
+- Cloudflare bindings, auth, database, and storage: `services/api/src/lib`
+- Browser access to backend behavior: typed clients in `apps/*/src/lib`
+
 ## Key Libraries (Where They Live)
 
 - Hono (Worker HTTP): `services/api/src/app.ts`

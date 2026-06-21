@@ -28,12 +28,23 @@ function parseAllowedHosts(value: string): string[] {
   return allowedHosts
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const allowedHosts = parseAllowedHosts(
-    requireEnv('VITE_ALLOWED_HOSTS', env.VITE_ALLOWED_HOSTS)
-  )
-  const apiUrl = requireEnv('VITE_API_URL', env.VITE_API_URL)
+  const server =
+    command === 'serve'
+      ? {
+          port: 3001,
+          allowedHosts: parseAllowedHosts(
+            requireEnv('VITE_ALLOWED_HOSTS', env.VITE_ALLOWED_HOSTS)
+          ),
+          proxy: {
+            '/api': {
+              target: requireEnv('VITE_API_URL', env.VITE_API_URL),
+              secure: false,
+            },
+          },
+        }
+      : undefined
 
   return {
     plugins: [
@@ -48,13 +59,7 @@ export default defineConfig(({ mode }) => {
         enabled: mode === 'production',
       }),
     ],
-    server: {
-      port: 3001,
-      allowedHosts,
-      proxy: {
-        '/api': { target: apiUrl, secure: false },
-      },
-    },
+    server,
     build: {
       outDir: 'dist',
       sourcemap: true,

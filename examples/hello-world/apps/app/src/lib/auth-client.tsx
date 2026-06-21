@@ -7,4 +7,4 @@ export const authClient = createAuthClient({
   },
 })
 
-export const { useSession } = authClient
+export const useSession: typeof authClient.useSession = authClient.useSession

@@ -25,8 +25,8 @@ const EXAMPLE_VALUES = {
   projectName: 'hello-world',
   projectDescription: 'Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.',
   domainName: 'hello-world.mvpkit.dev',
-  packageManager: 'pnpm',
-  packageManagerVersion: '10.14.0'
+  packageManager: 'bun',
+  packageManagerVersion: '1.3.10'
 }
 
 // Files/patterns to exclude from sync (contains actual secrets/IDs or generated content)
@@ -60,7 +60,6 @@ const PRESERVE_FILES = [
   '_scripts/',
   '.github/',
   '.serena/',
-  '.cursor/',
   'examples/',
   '.gitignore',
   'README.md',
@@ -68,8 +67,6 @@ const PRESERVE_FILES = [
   'packages/utils/README.md',
   'AGENTS.md.template',
   'CLAUDE.md.template',
-  'CODEX.md.template',
-  'llms.txt.template',
   'docs/llm/'
 ]
 

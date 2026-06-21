@@ -19,6 +19,7 @@ template.json
 .github/
 
 # Template-specific documentation
+README.md
 TEMPLATE_README.md
 
 # IDE and editor files (shouldn't be in source anyway)

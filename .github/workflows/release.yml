@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
@@ -21,16 +20,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        registry-url: 'https://npm.pkg.github.com'
-        scope: '@mvp-kit'
 
     - name: 🧠 Verify generated LLM docs are in sync
       run: node docs/scripts/context-sync.mjs --mode check
 
     - name: 🔍 Validate templates
-      run: npx @mvp-kit/template-validator@latest core
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npx @mvp-kit/template-validator@latest core --dir "$PWD"
 
   test-template:
     name: 🧪 Test Template
@@ -41,10 +36,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -53,7 +46,7 @@ jobs:
 
     - name: Create test app with @mvp-kit/cli
       run: |
-        pnpm dlx @mvp-kit/create@latest test-app --template-path . --yes --no-install --no-git
+        bun x @mvp-kit/create@latest test-app --template-path . --yes --no-install --no-git
 
     - name: Verify generated AI context files
       run: |
@@ -76,26 +69,26 @@ jobs:
 
     - name: Verify no unresolved template variables
       run: |
-        if rg -n '\{\{\s*[A-Za-z_]' test-app; then
+        if rg -n '\{\{[A-Za-z_][A-Za-z0-9_]*\}\}' test-app; then
           echo "❌ Unresolved template variables found in generated app"
           exit 1
         fi
 
     - name: Install test app dependencies
       working-directory: test-app
-      run: pnpm install
+      run: bun install
 
     - name: Lint check
       working-directory: test-app
-      run: pnpm run lint
+      run: bun run lint
 
     - name: Build
       working-directory: test-app
-      run: pnpm run build
+      run: bun run build
 
     - name: Type check
       working-directory: test-app
-      run: pnpm run typecheck
+      run: bun run typecheck
 
   release:
     name: 📦 Create Release

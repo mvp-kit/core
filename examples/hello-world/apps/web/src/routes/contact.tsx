@@ -11,7 +11,7 @@ function ContactPage() {
       <section className="mx-auto w-full max-w-3xl py-8">
         <h1 className="text-2xl font-semibold tracking-tight">Contact</h1>
         <p className="mt-2 text-muted-foreground">
-          Need help with hello-world? Reach out and we'll point you in the right direction.
+          {"Need help with hello-world? Reach out and we'll point you in the right direction."}
         </p>
 
         <div className="mt-6 grid gap-4 text-sm sm:grid-cols-2">

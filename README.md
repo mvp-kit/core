@@ -1,66 +1,79 @@
-# Hello World
+# MVPKit Core
 
-A generated MVPKit Core project aligned with the current Core subset architecture.
+An opinionated TypeScript monorepo for building on [Cloudflare](https://www.cloudflare.com).
 
-## Quick Start
+Core is for developers who want a practical full-stack starting point:
+
+- [Bun](https://bun.sh) workspaces with [Turbo](https://turbo.build)
+- [React](https://react.dev) + [Vite](https://vite.dev) public web app
+- [React](https://react.dev) + [Vite](https://vite.dev) authenticated app shell
+- [Hono](https://hono.dev) + [tRPC](https://trpc.io) [Cloudflare Workers](https://developers.cloudflare.com/workers/) API
+- [Better Auth](https://www.better-auth.com) email/password sessions
+- [Drizzle](https://orm.drizzle.team) schema for [Cloudflare D1](https://developers.cloudflare.com/d1/)
+- [Cloudflare KV](https://developers.cloudflare.com/kv/) and [Cloudflare R2](https://developers.cloudflare.com/r2/) bindings wired in
+- Shared UI, config, utilities, and API types
+- [Cloudflare Workers](https://developers.cloudflare.com/workers/) and [Cloudflare Pages](https://developers.cloudflare.com/pages/) deploy scripts
+
+## Why Cloudflare
+
+- The [Cloudflare free plan](https://www.cloudflare.com/plans/free/) is enough to start most small apps.
+- [Workers](https://developers.cloudflare.com/workers/), [Pages](https://developers.cloudflare.com/pages/), [D1](https://developers.cloudflare.com/d1/), [KV](https://developers.cloudflare.com/kv/), and [R2](https://developers.cloudflare.com/r2/) keep early infrastructure costs low.
+- The stack scales without needing to move to a traditional cloud.
+
+## Try It
 
 ```bash
-# pnpm
-pnpm install
-pnpm dev
-
-# bun
+bun create @mvp-kit my-app --template core
+cd my-app
 bun install
 bun run dev
 ```
 
 Local services:
 
-- Marketing web: http://localhost:3001
-- App dashboard: http://localhost:3002
-- API worker: http://localhost:3011
+- Web: http://localhost:3001
+- App: http://localhost:3002
+- API: http://localhost:3011
 
-## Project Structure
+## Layout
 
-- `apps/app/` - Authenticated app surface
-- `apps/web/` - Public marketing surface
-- `services/api/` - Cloudflare Worker API (Hono + tRPC)
-- `packages/types/` - Shared API contracts
-- `packages/ui/` - Shared UI primitives/components
-- `packages/utils/` - Shared utility helpers
+- `apps/web`: public marketing site
+- `apps/app`: authenticated product app
+- `services/api`: [Cloudflare Workers](https://developers.cloudflare.com/workers/) API
+- `packages/types`: shared [tRPC](https://trpc.io) router contracts
+- `packages/ui`: shared UI primitives
+- `packages/config`: shared client/runtime config
+- `packages/utils`: shared helpers
+- `docs/llm`: context docs for coding agents
 
-## Commands
+## Daily Commands
 
-```bash
-# pnpm
-pnpm typecheck
-pnpm build
-pnpm lint
+- `bun run dev`: start every workspace
+- `bun run dev:web`: start only the marketing site
+- `bun run dev:app`: start only the app
+- `bun run dev:api`: start only the API
+- `bun run check`: typecheck, lint, and build
+- `bun run typecheck`: typecheck all workspaces
+- `bun run lint`: run Biome checks
+- `bun run build`: build every workspace
 
-# bun
-bun run typecheck
-bun run build
-bun run lint
-```
+## Deploy
 
-## LLM Documentation Strategy
-
-Generated LLM support files are treated as source-controlled artifacts and are enforced in validation:
-
-- `docs/llm/context-map.md.template`
-- `docs/llm/change-playbooks.md.template`
-- `examples/hello-world/docs/llm/context-map.md`
-- `examples/hello-world/docs/llm/change-playbooks.md`
-
-Generation and drift checks:
+Create Cloudflare resources:
 
 ```bash
-# write template docs from code/contracts
-node docs/scripts/context-sync.mjs --mode write-template
-
-# write example docs from code/contracts
-node docs/scripts/context-sync.mjs --mode write-example
-
-# strict drift + contract check (template + example)
-node docs/scripts/context-sync.mjs --mode check
+cd services/api
+bun run setup:remote
 ```
+
+Then update `services/api/wrangler.toml` with the generated D1 and KV IDs, confirm `TRUSTED_ORIGINS`, and deploy:
+
+```bash
+bun run deploy
+```
+
+Focused deploys:
+
+- `bun run deploy:api`
+- `bun run deploy:web`
+- `bun run deploy:app`

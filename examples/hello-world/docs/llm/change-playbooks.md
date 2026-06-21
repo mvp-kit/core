@@ -5,27 +5,34 @@
 Template: `hello-world`
 Template version: `0.1.0`
 
-Use these playbooks to keep changes aligned with template contracts and Cloudflare runtime assumptions.
+Use these when a change crosses app, API, package, or Cloudflare runtime boundaries.
 
 ## Command Baseline
 
-- Dev: `pnpm dev`
-- Typecheck: `pnpm typecheck`
-- Lint: `pnpm lint`
-- Build: `pnpm build`
+- Dev: `bun dev`
+- Check: `bun run check`
+- Typecheck: `bun typecheck`
+- Lint: `bun lint`
+- Build: `bun build`
 
-## Playbook: Add A New tRPC Procedure
+## Add Or Change A tRPC Procedure
 
 1. Contract: update `packages/types/src/router.ts`
-2. API: implement + compose router in `services/api/src/trpc`
-3. UI: call via `trpc.*` in `apps/app` or `apps/web`
-4. Validate: run `pnpm typecheck`
+2. API: implement the procedure in `services/api/src/trpc`
+3. Client: call it through the existing tRPC client in `apps/app` or `apps/web`
+4. Validate: run `bun typecheck`
 
-## Playbook: Make It Auth-Protected
+## Make A Procedure Auth-Protected
 
-1. Use `protectedProcedure` in the API (`services/api/src/trpc/procedures.ts`)
-2. Ensure clients send cookies (`credentials: 'include'`) via the shared tRPC link (`packages/config/src/trpc-client.ts`)
-3. Ensure the corresponding procedure remains represented in `packages/types/src/router.ts`
+1. Use `protectedProcedure` in `services/api/src/trpc/procedures.ts`
+2. Keep cookie forwarding in `packages/config/src/trpc-client.ts`
+3. Keep the procedure represented in `packages/types/src/router.ts`
+
+## Add Persistence Or File Storage
+
+1. D1 schema and migrations belong in `services/api/src/lib/db`
+2. KV and R2 access belongs behind helpers in `services/api/src/lib`
+3. Frontends should call tRPC procedures instead of importing storage or database code
 
 ## Current Procedure Auth Map
 
@@ -42,35 +49,27 @@ Use these playbooks to keep changes aligned with template contracts and Cloudfla
    - `apps/app/src/components/auth`
    - `services/api/src/lib/auth`
    - `services/api/src/lib/db/auth.schema.ts`
-2. Extend shared types first when API contract changes.
-3. Update procedures/components.
-4. Validate using `pnpm typecheck`, `pnpm lint`, and `pnpm build`.
+2. Update `packages/types` when public inputs or outputs change.
+3. Validate with `bun typecheck`.
 
 ## Storage
 
 1. Read module files:
    - `services/api/src/lib/storage.ts`
    - `services/api/src/trpc/routers/storage.ts`
-2. Extend shared types first when API contract changes.
-3. Update procedures/components.
-4. Validate using `pnpm typecheck`, `pnpm lint`, and `pnpm build`.
+2. Update `packages/types` when public inputs or outputs change.
+3. Validate with `bun typecheck`.
 
 ## User Shell
 
 1. Read module files:
    - `apps/app/src/components/app`
    - `services/api/src/trpc/routers/user.ts`
-2. Extend shared types first when API contract changes.
-3. Update procedures/components.
-4. Validate using `pnpm typecheck`, `pnpm lint`, and `pnpm build`.
+2. Update `packages/types` when public inputs or outputs change.
+3. Validate with `bun typecheck`.
 
 ## Validation Checklist
 
 1. Procedure names match between `services/api/src/trpc` and `packages/types/src/router.ts`.
-2. Generated docs are in sync:
-   - `docs/llm/context-map.md(.template)`
-   - `docs/llm/change-playbooks.md(.template)`
-3. Workspace checks pass:
-   - `pnpm typecheck`
-   - `pnpm lint`
-   - `pnpm build`
+2. Generated docs are in sync: `node docs/scripts/context-sync.mjs --mode check`.
+3. Release-ready changes pass `bun run check`.

@@ -7,7 +7,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "composite": false,
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@repo/config": ["../../packages/config/src"],

@@ -20,7 +20,7 @@ show_help() {
     echo ""
     echo "WORKFLOW:"
     echo "  1. Make changes in templates      → Run: sync.sh to-example"
-    echo "  2. Test/develop in hello-world   → Run: cd examples/hello-world && pnpm dev"
+    echo "  2. Test/develop in hello-world   → Run: cd examples/hello-world && bun run dev"
     echo "  3. Make changes in hello-world   → Run: sync.sh from-example"
     echo "  4. Always validate after sync    → Run: sync.sh validate"
     echo ""

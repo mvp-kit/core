@@ -95,6 +95,6 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "packageManagers": ["pnpm", "bun"],
-  "defaultPackageManager": "pnpm"
+  "packageManagers": ["bun", "pnpm"],
+  "defaultPackageManager": "bun"
 }

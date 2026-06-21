@@ -29,8 +29,8 @@ const EXAMPLE_VALUES = {
 	projectDescription:
 		"Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.",
 	domainName: "hello-world.mvpkit.dev",
-	packageManager: "pnpm",
-	packageManagerVersion: "10.14.0",
+	packageManager: "bun",
+	packageManagerVersion: "1.3.10",
 };
 
 const REQUIRED_LLM_TEMPLATE_DOCS = [
@@ -299,12 +299,14 @@ function cleanupOrphanedExampleFiles(templateFiles) {
 		"*.log",
 		".DS_Store",
 		".env",
+		".env.example",
 		".env.local",
 		".env.development",
 		".env.production",
 		"pnpm-lock.yaml",
 		"package-lock.json",
 		"yarn.lock",
+		"bun.lock",
 		"bun.lockb",
 		".dev.vars",
 		"README.md", // Example might have its own README

@@ -1,6 +1,6 @@
-# hello-world
+# {{name}}
 
-Live demo of MVPKit - a modern full-stack TypeScript starter with React, tRPC, Cloudflare Workers, and authentication. Build and deploy MVPs faster.
+{{description}}
 
 This project was generated with MVPKit Core: an opinionated TypeScript monorepo for building on [Cloudflare](https://www.cloudflare.com).
 
@@ -25,8 +25,8 @@ This project was generated with MVPKit Core: an opinionated TypeScript monorepo 
 ## Start
 
 ```bash
-bun install
-bun run dev
+{{packageManager}} install
+{{packageManager}} run dev
 ```
 
 Local services:
@@ -48,14 +48,14 @@ Local services:
 
 ## Daily Commands
 
-- `bun run dev`: start every workspace
-- `bun run dev:web`: start only the marketing site
-- `bun run dev:app`: start only the app
-- `bun run dev:api`: start only the API
-- `bun run check`: typecheck, lint, and build
-- `bun run typecheck`: typecheck all workspaces
-- `bun run lint`: run Biome checks
-- `bun run build`: build every workspace
+- `{{packageManager}} run dev`: start every workspace
+- `{{packageManager}} run dev:web`: start only the marketing site
+- `{{packageManager}} run dev:app`: start only the app
+- `{{packageManager}} run dev:api`: start only the API
+- `{{packageManager}} run check`: typecheck, lint, and build
+- `{{packageManager}} run typecheck`: typecheck all workspaces
+- `{{packageManager}} run lint`: run Biome checks
+- `{{packageManager}} run build`: build every workspace
 
 ## Deploy
 
@@ -63,17 +63,17 @@ Create Cloudflare resources:
 
 ```bash
 cd services/api
-bun run setup:remote
+{{packageManager}} run setup:remote
 ```
 
 Then update `services/api/wrangler.toml` with the generated D1 and KV IDs, confirm `TRUSTED_ORIGINS`, and deploy:
 
 ```bash
-bun run deploy
+{{packageManager}} run deploy
 ```
 
 Focused deploys live in the owning workspaces:
 
-- `cd services/api && bun run deploy`
-- `cd apps/web && bun run deploy`
-- `cd apps/app && bun run deploy`
+- `cd services/api && {{packageManager}} run deploy`
+- `cd apps/web && {{packageManager}} run deploy`
+- `cd apps/app && {{packageManager}} run deploy`
