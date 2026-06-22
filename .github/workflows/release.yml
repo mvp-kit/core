@@ -19,7 +19,7 @@ jobs:
     - name: 📦 Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '24'
 
     - name: 🧠 Verify generated LLM docs are in sync
       run: node docs/scripts/context-sync.mjs --mode check
@@ -42,20 +42,21 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '24'
 
-    - name: Create test app with @mvp-kit/cli
+    - name: Create test app with @mvp-kit/create
       run: |
         bun x @mvp-kit/create@latest test-app --template-path . --yes --no-install --no-git
+
+    - name: Verify generated app uses Bun
+      run: |
+        node -e "const pkg = require('./test-app/package.json'); if (!String(pkg.packageManager || '').startsWith('bun@')) throw new Error('Expected generated app to use bun packageManager')"
 
     - name: Verify generated AI context files
       run: |
         required_files=(
           "AGENTS.md"
           "CLAUDE.md"
-          "CODEX.md"
-          ".cursor/rules/mvpkit.mdc"
-          "llms.txt"
           "docs/llm/context-map.md"
           "docs/llm/change-playbooks.md"
         )

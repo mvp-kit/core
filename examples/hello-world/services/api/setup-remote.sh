@@ -20,7 +20,13 @@ fi
 echo "Cloudflare remote bindings (production)"
 echo "======================================"
 
-AUTH_STATUS="$(wrangler whoami 2>&1 || true)"
+AUTH_STATUS="$(wrangler whoami 2>&1)"
+AUTH_RESULT=$?
+if [[ "$AUTH_RESULT" -ne 0 ]]; then
+  echo "$AUTH_STATUS"
+  exit "$AUTH_RESULT"
+fi
+
 if echo "$AUTH_STATUS" | grep -q "You are not authenticated"; then
   echo "Not logged in. Run:"
   echo "  wrangler login"
@@ -37,49 +43,121 @@ BUCKET_NAME="$PROJECT_KEBAB-bucket"
 
 DATABASE_ID=""
 KV_ID=""
+FAILED=0
+
+parse_resource_id() {
+  local resource_name="$1"
+  local name_field="$2"
+  local id_fields="$3"
+
+  node -e '
+const fs = require("node:fs");
+const resourceName = process.argv[1];
+const nameField = process.argv[2];
+const idFields = process.argv[3].split(",");
+const input = fs.readFileSync(0, "utf8").trim();
+if (!input) process.exit(0);
+try {
+  const parsed = JSON.parse(input);
+  const rows = Array.isArray(parsed) ? parsed : Object.values(parsed).find(Array.isArray) || [];
+  const match = rows.find((row) => row && row[nameField] === resourceName);
+  if (!match) process.exit(0);
+  for (const field of idFields) {
+    if (match[field]) {
+      console.log(match[field]);
+      process.exit(0);
+    }
+  }
+} catch {
+  process.exit(0);
+}
+' "$resource_name" "$name_field" "$id_fields"
+}
+
+find_d1_id() {
+  wrangler d1 list --json 2>/dev/null | parse_resource_id "$DB_NAME" "name" "uuid,id,database_id"
+}
+
+find_kv_id() {
+  wrangler kv namespace list 2>/dev/null | parse_resource_id "$KV_NAME" "title" "id"
+}
+
+bucket_exists() {
+  wrangler r2 bucket list 2>/dev/null | grep -q -E "(^|[[:space:]])$BUCKET_NAME($|[[:space:]])"
+}
 
 echo ""
 echo "Step 1: D1"
-echo "Creating database: $DB_NAME"
-DB_OUTPUT="$(wrangler d1 create "$DB_NAME" 2>&1 || true)"
-if echo "$DB_OUTPUT" | grep -q -E "(database_id|Created database)"; then
+DATABASE_ID="$(find_d1_id || true)"
+if [[ -n "$DATABASE_ID" ]]; then
+  echo "Found existing database: $DB_NAME"
+  echo "database_id: $DATABASE_ID"
+else
+  echo "Creating database: $DB_NAME"
+  DB_OUTPUT="$(wrangler d1 create "$DB_NAME" 2>&1 || true)"
   DATABASE_ID="$(echo "$DB_OUTPUT" | grep -oE "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}" | head -1)"
-  echo "Created (or already exists)."
+fi
+if [[ -n "$DATABASE_ID" ]]; then
+  echo "D1 ready."
+elif echo "$DB_OUTPUT" | grep -q "already exists"; then
+  DATABASE_ID="$(find_d1_id || true)"
   if [[ -n "$DATABASE_ID" ]]; then
+    echo "Found existing database after create attempt."
     echo "database_id: $DATABASE_ID"
   else
-    echo "database_id: <not parsed> (see output below)"
+    echo "D1 exists, but the database ID could not be resolved. Run: wrangler d1 list"
+    FAILED=1
   fi
 else
   echo "D1 create did not succeed. Output:"
   echo "$DB_OUTPUT"
+  FAILED=1
 fi
 
 echo ""
 echo "Step 2: KV"
-echo "Creating namespace: $KV_NAME"
-KV_OUTPUT="$(wrangler kv namespace create "$KV_NAME" 2>&1 || true)"
-if echo "$KV_OUTPUT" | grep -q "id ="; then
+KV_ID="$(find_kv_id || true)"
+if [[ -n "$KV_ID" ]]; then
+  echo "Found existing namespace: $KV_NAME"
+  echo "id: $KV_ID"
+else
+  echo "Creating namespace: $KV_NAME"
+  KV_OUTPUT="$(wrangler kv namespace create "$KV_NAME" 2>&1 || true)"
   KV_ID="$(echo "$KV_OUTPUT" | grep "id =" | cut -d'\"' -f2 | head -1)"
-  echo "Created (or already exists)."
+fi
+if [[ -n "$KV_ID" ]]; then
+  echo "KV ready."
+elif echo "$KV_OUTPUT" | grep -q "already exists"; then
+  KV_ID="$(find_kv_id || true)"
   if [[ -n "$KV_ID" ]]; then
+    echo "Found existing namespace after create attempt."
     echo "id: $KV_ID"
   else
-    echo "id: <not parsed> (see output below)"
+    echo "KV namespace exists, but the ID could not be resolved. Run: wrangler kv namespace list"
+    FAILED=1
   fi
 else
   echo "KV create did not succeed. Output:"
   echo "$KV_OUTPUT"
+  FAILED=1
 fi
 
 echo ""
 echo "Step 3: R2"
-echo "Creating bucket: $BUCKET_NAME"
-if wrangler r2 bucket create "$BUCKET_NAME" >/dev/null 2>&1; then
-  echo "Created (or already exists)."
+if bucket_exists; then
+  echo "Found existing bucket: $BUCKET_NAME"
+  echo "R2 ready."
 else
-  echo "R2 create did not succeed. Try:"
-  echo "  wrangler r2 bucket list"
+  echo "Creating bucket: $BUCKET_NAME"
+  R2_OUTPUT="$(wrangler r2 bucket create "$BUCKET_NAME" 2>&1 || true)"
+  if bucket_exists || echo "$R2_OUTPUT" | grep -q -E "(Created|already exists)"; then
+    echo "R2 ready."
+  else
+    echo "R2 create did not succeed. Output:"
+    echo "$R2_OUTPUT"
+    echo "Try: wrangler r2 bucket list"
+    FAILED=1
+  fi
 fi
 
 echo ""
@@ -106,3 +184,7 @@ echo "- wrangler kv namespace list"
 echo "- wrangler r2 bucket list"
 echo "- wrangler deployments list"
 echo "- wrangler tail"
+
+if [[ "$FAILED" -ne 0 ]]; then
+  exit 1
+fi

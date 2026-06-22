@@ -1,4 +1,4 @@
-import type { AppRouter } from '@repo/types'
+import type { AppRouter } from '@repo/api'
 import type { CreateTRPCReact } from '@trpc/react-query'
 import { createTRPCReact } from '@trpc/react-query'
 

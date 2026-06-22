@@ -30,9 +30,7 @@ export function SiteHeader() {
               <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" />
             </svg>
           </span>
-          <span className="text-sm font-semibold tracking-tight">
-            {{name}}
-          </span>
+          <span className="text-sm font-semibold tracking-tight">{{name}}</span>
           <span className="rounded-full border border-border px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
             Core
           </span>

@@ -17,10 +17,27 @@ export const Route = createFileRoute('/')({
 })
 
 function WebHome() {
-  const ping = trpc.ping.useQuery()
+  const ping = trpc.ping.useQuery(undefined, {
+    enabled: false,
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
   const user = trpc.user.get.useQuery(undefined, {
     retry: false,
   })
+  const pingCheckedAt = ping.data?.timestamp
+    ? new Date(ping.data.timestamp).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+    : null
+  const pingMessage = ping.isFetching
+    ? 'Pinging API'
+    : ping.isError
+      ? 'API unavailable'
+      : (ping.data?.message ?? 'Click Ping to check the API')
+  const isPingHealthy = ping.data?.status === 'ok'
 
   return (
     <SiteLayout>
@@ -58,20 +75,30 @@ function WebHome() {
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             <div className="core-test-item">
-              <div>
-                <p className="text-sm font-medium">Health</p>
-                <p className="text-xs text-muted-foreground">
-                  {ping.isLoading
-                    ? 'Checking API'
-                    : ping.isError
-                      ? 'API unavailable'
-                      : ping.data?.status === 'ok'
-                        ? 'API connected'
-                        : 'Status unknown'}
-                </p>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium">Health</p>
+                  {isPingHealthy ? (
+                    <span
+                      className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.16)]"
+                      title="API healthy"
+                    >
+                      <span className="sr-only">API healthy</span>
+                    </span>
+                  ) : null}
+                </div>
+                <p className="text-xs text-muted-foreground">{pingMessage}</p>
+                {pingCheckedAt ? (
+                  <p className="mt-1 text-[11px] text-muted-foreground">Checked {pingCheckedAt}</p>
+                ) : null}
               </div>
-              <Button size="sm" className="h-8 px-3" onClick={() => ping.refetch()}>
-                Test
+              <Button
+                size="sm"
+                className="h-8 px-3"
+                onClick={() => ping.refetch()}
+                disabled={ping.isFetching}
+              >
+                {ping.isFetching ? 'Pinging...' : 'Ping'}
               </Button>
             </div>
             <div className="core-test-item">

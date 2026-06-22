@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "description": "{{name}} - backend",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "tsc && tsc-alias",
     "deploy": "wrangler d1 migrations apply {{name}}-db --env production --remote || echo 'No migrations to apply' && wrangler deploy --env production",
     "dev": "wrangler dev --port 3011",
     "preview": "wrangler dev --port 3011",
@@ -25,6 +29,7 @@
   },
   "dependencies": {
     "@hono/trpc-server": "0.4.2",
+    "@repo/types": "workspace:*",
     "@trpc/server": "11.18.0",
     "better-auth": "1.6.20",
     "better-auth-cloudflare": "0.3.0",
@@ -36,7 +41,16 @@
     "@cloudflare/workers-types": "4.20260621.1",
     "@types/node": "26.0.0",
     "drizzle-kit": "0.31.10",
+    "tsc-alias": "1.8.17",
     "typescript": "6.0.3",
     "wrangler": "4.103.0"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./trpc": "./dist/trpc/index.js"
+  },
+  "sideEffects": false
 }

@@ -46,6 +46,8 @@ jspm_packages/
 # Environment variables
 .env*
 !.env.example
+!apps/web/.env.production
+!apps/app/.env.production
 wrangler.toml.backup
 
 # Cache directories

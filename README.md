@@ -66,7 +66,7 @@ cd services/api
 bun run setup:remote
 ```
 
-Then update `services/api/wrangler.toml` with the generated D1 and KV IDs, confirm `TRUSTED_ORIGINS`, and deploy:
+Then update `services/api/wrangler.toml` with the generated D1 and KV IDs, and deploy:
 
 ```bash
 bun run deploy
@@ -77,3 +77,5 @@ Focused deploys:
 - `bun run deploy:api`
 - `bun run deploy:web`
 - `bun run deploy:app`
+
+The generated production env files target the default `*.pages.dev` URLs so the first deploy is reachable without custom DNS. After your custom domain is live, update the app/web env files, add the custom origins to `TRUSTED_ORIGINS`, and set `COOKIE_DOMAIN` only if the web and app hosts share the same parent domain.

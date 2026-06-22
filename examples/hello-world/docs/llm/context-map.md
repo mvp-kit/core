@@ -3,19 +3,19 @@
 # Context Map
 
 Template: `hello-world`
-Template version: `0.1.0`
+Template version: `0.1.1`
 
 ## Runtime Surfaces
 
 - `apps/web`: public marketing surface (routes: `apps/web/src/routes/*`)
 - `apps/app`: authenticated product surface (signed-in boundary: `apps/app/src/routes/_app.tsx`)
 - `services/api`: Cloudflare Worker API (pipeline: `services/api/src/app.ts`)
-- `packages/*`: shared contracts, UI, and bootstrap helpers
+- `packages/*`: shared schemas, UI, and bootstrap helpers
 
 ## Boundaries
 
-- Public API shape: `packages/types/src/router.ts`
-- API implementation: `services/api/src/trpc`
+- Public API shape and `AppRouter`: `services/api/src/trpc`
+- Shared request/response schemas: `packages/types/src/schemas` and `packages/types/src/types`
 - Cloudflare bindings, auth, database, and storage: `services/api/src/lib`
 - Browser access to backend behavior: typed clients in `apps/*/src/lib`
 
@@ -23,7 +23,7 @@ Template version: `0.1.0`
 
 - Hono (Worker HTTP): `services/api/src/app.ts`
 - tRPC router + context: `services/api/src/trpc/index.ts`
-- Contract router (`AppRouter`): `packages/types/src/router.ts`
+- Contract router (`AppRouter`): `services/api/src/trpc/index.ts`
 - Better Auth (server): `services/api/src/lib/auth`
 - Better Auth (client): `apps/app/src/lib/auth-client.tsx`
 - TanStack Router: `apps/*/src/routes/*`

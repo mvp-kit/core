@@ -2,7 +2,6 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import { sitemapPlugin } from '@mvp-kit/vite-sitemap-plugin'
 
 function requireEnv(name: string, value: string | undefined): string {
@@ -47,17 +46,19 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [
-      tsconfigPaths(),
       tanstackRouter({ target: 'react' }),
       react(),
       tailwindcss(),
       sitemapPlugin({
-        baseUrl: 'https://app.hello-world.mvpkit.dev',
+        baseUrl: `https://${requireEnv('VITE_DOMAIN', env.VITE_DOMAIN)}`,
         routeTreePath: 'src/routeTree.gen.ts',
         enabled: mode === 'production',
       }),
     ],
     server,
+    resolve: {
+      tsconfigPaths: true,
+    },
     build: {
       outDir: 'dist',
       sourcemap: true,

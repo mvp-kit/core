@@ -288,15 +288,52 @@ function cleanupOrphanedExampleFiles(templateFiles) {
 
 	console.log("\n🧹 Cleaning up orphaned example files...");
 
-	// Files/patterns that should be preserved in example (development artifacts)
+	const ARTIFACT_DIRECTORIES = new Set([
+		"node_modules",
+		".turbo",
+		"dist",
+		"build",
+	]);
+
+	function cleanupExampleArtifacts(dir = EXAMPLE_DIR) {
+		if (!fs.existsSync(dir)) return;
+
+		for (const item of fs.readdirSync(dir)) {
+			const itemPath = path.join(dir, item);
+			const relativePath = path.relative(EXAMPLE_DIR, itemPath);
+
+			try {
+				const stat = fs.statSync(itemPath);
+				if (stat.isDirectory()) {
+					if (ARTIFACT_DIRECTORIES.has(item)) {
+						fs.rmSync(itemPath, { recursive: true, force: true });
+						console.log(`🗑️  Removed artifact directory: ${relativePath}/`);
+						continue;
+					}
+
+					cleanupExampleArtifacts(itemPath);
+					continue;
+				}
+
+				if (
+					item.endsWith(".tsbuildinfo") ||
+					item.endsWith(".log") ||
+					item.endsWith(".tmp")
+				) {
+					fs.unlinkSync(itemPath);
+					console.log(`🗑️  Removed artifact file: ${relativePath}`);
+				}
+			} catch (error) {
+				console.log(`⚠️  Skipping artifact cleanup for ${relativePath}: ${error.message}`);
+			}
+		}
+	}
+
+	cleanupExampleArtifacts();
+
+	// Files/patterns that should be preserved in example after template sync.
 	const PRESERVE_IN_EXAMPLE = [
-		"node_modules/",
-		".turbo/",
 		".wrangler/",
-		"dist/",
-		"build/",
-		"*.tsbuildinfo",
-		"*.log",
 		".DS_Store",
 		".env",
 		".env.example",

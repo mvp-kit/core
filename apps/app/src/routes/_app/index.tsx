@@ -11,6 +11,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { trpc } from '@/lib/trpc'
 
+type CheckStatus = 'idle' | 'running' | 'success' | 'failure'
+
 export const Route = createFileRoute('/_app/')({
   component: AppHome,
 })
@@ -21,12 +23,50 @@ function AppHome() {
     retry: false,
     refetchOnWindowFocus: false,
   })
-  const [status, setStatus] = useState<'idle' | 'running' | 'success' | 'failure'>('idle')
+  const userProfile = trpc.user.get.useQuery(undefined, {
+    enabled: false,
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+  const storageList = trpc.storage.list.useQuery(
+    { prefix: 'core-smoke/' },
+    {
+      enabled: false,
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  )
+  const [status, setStatus] = useState<CheckStatus>('idle')
+  const [message, setMessage] = useState('Click Test to verify API, auth, and storage readiness.')
 
   const runApiHealthCheck = async () => {
     setStatus('running')
-    const result = await ping.refetch()
-    setStatus(result.error ? 'failure' : 'success')
+    setMessage('Running baseline checks...')
+
+    const [pingResult, userResult, storageResult] = await Promise.all([
+      ping.refetch(),
+      userProfile.refetch(),
+      storageList.refetch(),
+    ])
+
+    const failedChecks = [
+      pingResult.error ? 'API' : null,
+      userResult.error ? 'Auth' : null,
+      storageResult.error ? 'Storage' : null,
+    ].filter(Boolean)
+
+    if (failedChecks.length > 0) {
+      setStatus('failure')
+      setMessage(`${failedChecks.join(', ')} check failed. Confirm local bindings and auth setup.`)
+      return
+    }
+
+    setStatus('success')
+    setMessage(
+      `${pingResult.data?.message ?? 'Core API is running'} Authenticated as ${
+        userResult.data?.email ?? 'current user'
+      }. Storage listed ${storageResult.data?.objects.length ?? 0} object(s).`
+    )
   }
 
   return (
@@ -50,8 +90,8 @@ function AppHome() {
         <CardContent className="space-y-4">
           <div className="core-test-item">
             <div>
-              <p className="text-sm font-medium">API Health</p>
-              <p className="text-xs text-muted-foreground">tRPC ping endpoint</p>
+              <p className="text-sm font-medium">Baseline Readiness</p>
+              <p className="text-xs text-muted-foreground">API, auth session, and R2 storage</p>
             </div>
             <Button
               type="button"
@@ -85,15 +125,7 @@ function AppHome() {
               </Badge>
             </div>
 
-            <p className="mt-2 text-sm">
-              {status === 'running'
-                ? 'Running API health check...'
-                : status === 'success'
-                  ? (ping.data?.message ?? 'Core API is running')
-                  : status === 'failure'
-                    ? 'Could not reach the API. Please try again.'
-                    : 'Click Test to verify API connectivity.'}
-            </p>
+            <p className="mt-2 text-sm">{message}</p>
           </div>
         </CardContent>
       </Card>

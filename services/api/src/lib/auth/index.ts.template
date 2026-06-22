@@ -39,16 +39,25 @@ function isLocalOrigin(origin: string): boolean {
   }
 }
 
-function resolveCookieDomain(env: AppBindings, trustedOrigins: string[], nodeEnv: string): string {
-  const configuredDomain = normalizeDomain(requireEnv('COOKIE_DOMAIN', env.COOKIE_DOMAIN))
+function resolveCookieDomain(
+  env: AppBindings,
+  trustedOrigins: string[],
+  nodeEnv: string
+): string | undefined {
+  const configuredDomain = env.COOKIE_DOMAIN?.trim()
+  if (!configuredDomain) {
+    return undefined
+  }
+
+  const normalizedDomain = normalizeDomain(configuredDomain)
   if (nodeEnv !== 'production' && trustedOrigins.some(isLocalOrigin)) {
     return 'localhost'
   }
-  return configuredDomain
+  return normalizedDomain
 }
 
-function shouldEnableCrossSubDomainCookies(domain: string): boolean {
-  return !isLocalHost(domain)
+function shouldEnableCrossSubDomainCookies(domain: string | undefined): domain is string {
+  return Boolean(domain && !isLocalHost(domain))
 }
 
 function getTrustedOrigins(env: AppBindings): string[] {
@@ -74,7 +83,7 @@ function createAuth(env?: AppBindings, cf?: IncomingRequestCfProperties) {
   // biome-ignore lint/suspicious/noExplicitAny: needed for fallback type
   const db = env ? drizzle(env.DB, { schema, logger: false }) : ({} as any)
   let trustedOrigins = ['localhost:*']
-  let cookieDomain = 'localhost'
+  let cookieDomain: string | undefined = 'localhost'
   if (env) {
     const nodeEnv = validateRuntimeConfig(env)
     trustedOrigins = getTrustedOrigins(env)
@@ -108,10 +117,14 @@ function createAuth(env?: AppBindings, cf?: IncomingRequestCfProperties) {
     trustedOrigins,
     advanced: {
       cookiePrefix: '{{name}}',
-      crossSubDomainCookies: {
-        enabled: shouldEnableCrossSubDomainCookies(cookieDomain),
-        domain: cookieDomain,
-      },
+      ...(shouldEnableCrossSubDomainCookies(cookieDomain)
+        ? {
+            crossSubDomainCookies: {
+              enabled: true,
+              domain: cookieDomain,
+            },
+          }
+        : {}),
     },
   }
 

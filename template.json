@@ -7,7 +7,7 @@
   "socialInstagramHandle": "@mvpkit",
   "socialTiktokHandle": "@mvpkittok",
   "schemaTemplateUrl": "https://mvpkit.dev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Full-stack TypeScript monorepo with React + Vite frontend and Cloudflare Workers backend",
   "author": "MVPKit Team",
   "repository": "https://github.com/mvp-kit/core",

@@ -40,7 +40,7 @@ Local services:
 - `apps/web`: public marketing site
 - `apps/app`: authenticated product app
 - `services/api`: [Cloudflare Workers](https://developers.cloudflare.com/workers/) API
-- `packages/types`: shared [tRPC](https://trpc.io) router contracts
+- `packages/types`: shared schemas and frontend-safe DTOs
 - `packages/ui`: shared UI primitives
 - `packages/config`: shared client/runtime config
 - `packages/utils`: shared helpers
@@ -66,7 +66,9 @@ cd services/api
 {{packageManager}} run setup:remote
 ```
 
-Then update `services/api/wrangler.toml` with the generated D1 and KV IDs, confirm `TRUSTED_ORIGINS`, and deploy:
+The setup script is safe to rerun; it creates missing Cloudflare resources and prints existing IDs when resources already exist.
+
+Then update `services/api/wrangler.toml` with the generated D1 and KV IDs, and deploy:
 
 ```bash
 {{packageManager}} run deploy
@@ -77,3 +79,5 @@ Focused deploys live in the owning workspaces:
 - `cd services/api && {{packageManager}} run deploy`
 - `cd apps/web && {{packageManager}} run deploy`
 - `cd apps/app && {{packageManager}} run deploy`
+
+The generated production env files target the default `*.pages.dev` URLs so the first deploy is reachable without custom DNS. After your custom domain is live, update the app/web env files, add the custom origins to `TRUSTED_ORIGINS`, and set `COOKIE_DOMAIN` only if the web and app hosts share the same parent domain.

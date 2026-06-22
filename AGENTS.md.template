@@ -8,8 +8,8 @@ Make production-safe changes that keep the app, API, and shared contracts cohere
 
 ## Source Of Truth
 
-1. `packages/types`
-2. `services/api/src/trpc`
+1. `services/api/src/trpc`
+2. `packages/types`
 3. `docs/llm/context-map.md`
 4. `docs/llm/change-playbooks.md`
 
@@ -21,7 +21,7 @@ Make production-safe changes that keep the app, API, and shared contracts cohere
 
 ## Working Rules
 
-- Keep request/response contracts in `packages/types` aligned with tRPC implementation in `services/api/src/trpc`.
+- Keep `AppRouter` sourced from `services/api/src/trpc`; use `packages/types` for schemas and shared DTOs reused across surfaces.
 - Keep Cloudflare bindings, auth, database, and storage behavior inside `services/api`.
 - Keep frontend code behind typed clients; do not import Worker-only modules into `apps/*`.
 - Preserve baseline modules unless the router contracts, docs, and UI call sites are updated together.
@@ -32,5 +32,5 @@ Make production-safe changes that keep the app, API, and shared contracts cohere
 
 ## Runtime Details
 
-- Template version: 0.1.0
+- Template version: 0.1.1
 - Project domain: {{domain}}

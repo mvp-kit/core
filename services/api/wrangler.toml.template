@@ -32,9 +32,10 @@ name = "{{name}}-api"
 
 [env.production.vars]
 NODE_ENV = "production"
-DOMAIN = "{{domain}}"
-COOKIE_DOMAIN = "{{domain}}"
+DOMAIN = "app.{{domain}}"
 TRUSTED_ORIGINS = "https://{{domain}},https://app.{{domain}},https://www.{{domain}}"
+# Set COOKIE_DOMAIN only when web and app use a shared custom parent domain.
+# COOKIE_DOMAIN = "{{domain}}"
 
 [[env.production.d1_databases]]
 binding = "DB"

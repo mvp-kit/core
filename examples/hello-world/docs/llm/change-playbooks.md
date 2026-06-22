@@ -3,7 +3,7 @@
 # Change Playbooks
 
 Template: `hello-world`
-Template version: `0.1.0`
+Template version: `0.1.1`
 
 Use these when a change crosses app, API, package, or Cloudflare runtime boundaries.
 
@@ -17,8 +17,8 @@ Use these when a change crosses app, API, package, or Cloudflare runtime boundar
 
 ## Add Or Change A tRPC Procedure
 
-1. Contract: update `packages/types/src/router.ts`
-2. API: implement the procedure in `services/api/src/trpc`
+1. API: implement the procedure in `services/api/src/trpc`
+2. Shared schemas: update `packages/types` when public inputs or outputs should be reused outside the API
 3. Client: call it through the existing tRPC client in `apps/app` or `apps/web`
 4. Validate: run `bun typecheck`
 
@@ -26,7 +26,7 @@ Use these when a change crosses app, API, package, or Cloudflare runtime boundar
 
 1. Use `protectedProcedure` in `services/api/src/trpc/procedures.ts`
 2. Keep cookie forwarding in `packages/config/src/trpc-client.ts`
-3. Keep the procedure represented in `packages/types/src/router.ts`
+3. Confirm frontend callers still type against `AppRouter` from `@repo/api`
 
 ## Add Persistence Or File Storage
 
@@ -49,7 +49,7 @@ Use these when a change crosses app, API, package, or Cloudflare runtime boundar
    - `apps/app/src/components/auth`
    - `services/api/src/lib/auth`
    - `services/api/src/lib/db/auth.schema.ts`
-2. Update `packages/types` when public inputs or outputs change.
+2. Update `packages/types` schemas or shared types when public inputs or outputs change.
 3. Validate with `bun typecheck`.
 
 ## Storage
@@ -57,7 +57,7 @@ Use these when a change crosses app, API, package, or Cloudflare runtime boundar
 1. Read module files:
    - `services/api/src/lib/storage.ts`
    - `services/api/src/trpc/routers/storage.ts`
-2. Update `packages/types` when public inputs or outputs change.
+2. Update `packages/types` schemas or shared types when public inputs or outputs change.
 3. Validate with `bun typecheck`.
 
 ## User Shell
@@ -65,11 +65,12 @@ Use these when a change crosses app, API, package, or Cloudflare runtime boundar
 1. Read module files:
    - `apps/app/src/components/app`
    - `services/api/src/trpc/routers/user.ts`
-2. Update `packages/types` when public inputs or outputs change.
+2. Update `packages/types` schemas or shared types when public inputs or outputs change.
 3. Validate with `bun typecheck`.
 
 ## Validation Checklist
 
-1. Procedure names match between `services/api/src/trpc` and `packages/types/src/router.ts`.
-2. Generated docs are in sync: `node docs/scripts/context-sync.mjs --mode check`.
-3. Release-ready changes pass `bun run check`.
+1. Procedure names are parsed from `services/api/src/trpc`.
+2. Shared schemas in `packages/types` are reused by API procedures when applicable.
+3. Generated docs are in sync: `node docs/scripts/context-sync.mjs --mode check`.
+4. Release-ready changes pass `bun run check`.
